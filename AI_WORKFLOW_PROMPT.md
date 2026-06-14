@@ -1,11 +1,5 @@
 # 🤖 AI 视频转动效规范：标准工作流提示词
 
-只要你有 **Gemini 1.5 Pro / GPT-4o** 等具备强大「视频/视觉理解能力」的大模型，你就可以把收集到的 MP4 或 GIF 发给它，并附上以下系统提示词，让它自动生成标准化的 `_template.md`，直接入库！
-
----
-
-## 复制以下提示词给 AI：
-
 ```markdown
 你现在是一位全球顶尖的动效设计师（Motion Designer）与前端架构师，精通 Framer Motion、CSS Animations 以及 Apple Human Interface Guidelines 中的物理反馈原则。
 

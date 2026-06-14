@@ -3,33 +3,52 @@
 > 专为 Vibecoding 设计的**页面交互与动效库**。提供各种创意特效，选中你想要的特效，把对应的包含精确物理参数的 Markdown 文件丢给 AI，让它瞬间写出高还原的交互特效，摆脱沉闷页面与代码。
 
 ## 💡 为什么需要这个库？
+
 UI 设计系统（如颜色、间距）决定了界面**“长什么样”**，而 Interaction MD 决定了界面**“怎么动、什么感觉”**。
-大模型很难仅凭“丝滑一点”的形容词写出好动效，但如果你给它精确的**弹簧刚度 (stiffness)、阻尼 (damping) 和贝塞尔曲线**，它就能完美还带完美阻尼感、呼吸感和丝滑过渡的原顶级交互。
+大模型很难仅凭“丝滑一点”的形容词写出好动效，但如果你给它精确的**弹簧刚度 (stiffness)、阻尼 (damping) 和贝塞尔曲线**，它就能完美还原带完美阻尼感、呼吸感和丝滑过渡的顶级交互。
+
+## 🗂 多维度分类规范
+
+为了更契合开发者与 AI Agent 的检索直觉，本库抛弃了传统的单层文件夹分类，采用 **“扁平存储 + 多维标签 (Front-matter Tags)”** 的网状架构。每个动效规范文件都包含以下两个维度的元数据：
+
+### 维度 A：情绪基调与行业 (Vibes & Domains)
+- 🛠 **DevTools (极客/效率)**：暗黑、等宽字体、高对比度、机械感动效。（类 Linear, Cursor）
+- 🧘‍♀️ **Calm (治愈/心理)**：低饱和、大圆角、舒缓渐变、弹性慢动效。（类 Tiimo, Headspace）
+- 🎨 **Creative (张扬/创意)**：新粗野主义、大色块、硬阴影、粗体排版。（类 Figma, Gumroad）
+- 🏢 **Enterprise (企业看板)**：便当盒布局、高信息密度、干净的蓝灰配色。（类 Stripe, Notion）
+
+### 维度 B：交互类型 (Interaction Types)
+- 🖱 **Micro-interactions (微交互)**：按钮点击、Hover 态、开关切换。
+- 🗺 **Navigations (导航流转)**：侧边栏丝滑展开、流体 Tabs、底部导航吸附。
+- 🔔 **Feedback (反馈机制)**：成功撒花、错误抖动、加载骨架屏过渡。
+
+---
 
 ## 🚀 如何使用 (For Cursor Users)
 
 1. 下载本项目中的 `skills/interaction-library` 文件夹。
 2. 将其复制到你项目的 `.cursor/skills/` 目录下（如果没有该目录请新建）。
-3. 你的目录结构看起来像这样：
+3. 你的目录结构看起来像这样（**所有引用规范一律扁平放置在 references 中**）：
    ```text
    你的项目/
    └── .cursor/
        └── skills/
            └── interaction-library/
-               ├── SKILL.md
-               ├── assets/
+               ├── SKILL.md                 # 路由大脑：内部根据 Vibes 维护索引
+               ├── assets/                  # 存放配套的动效演示视频或 GIF
                └── references/
-                   └── fluid-tabs.md
-   ```
-4. **触发体验**：在 Cursor 聊天框中说：*“帮我写一个 Tab 切换组件，交互请严格参考库里的「流体标签」动效。”*
+                   ├── fluid-tabs.md        # 带有 Vibe & Interaction 标签的规范文件
+                   └── typographic-menu.md
+
+    ```
+4. **触发体验**：在 Cursor 聊天框中 @ 对应的文件并说：“帮我写一个 Tab 切换组件，交互和动效物理参数请严格参考库里的「流体标签」。”
 
 ## 🎬 贡献指南：如何添加你喜欢的交互？
 
-看到一个惊艳的 UI 动图？你可以结合 **Gemini 1.5 Pro (或 GPT-4o)** 的视频解析能力，一键将其转化为本库支持的 `.md` 规范。
-
-👉 **[查看基于 AI 的自动化入库工作流](./AI_WORKFLOW_PROMPT.md)**
+看到一个惊艳的 UI 动图？你可以结合 **Gemini 1.5 Pro (或 GPT-4o)** 的视频解析能力，带上[AI_WORKFLOW_PROMPT](./AI_WORKFLOW_PROMPT.md)的提示词一键将其转化为本库支持的 `.md` 规范。，然后把同步把资源放在assets文件夹下面供参考来源。
 
 ## 📁 目录说明
+
 - `skills/interaction-library/SKILL.md`：给 Cursor Agent 的“路由大脑”。
 - `skills/interaction-library/references/`：存放具体的动效拆解参数文件（`.md`）。
 - `skills/interaction-library/assets/`：存放配套的动效演示视频或 GIF，方便你和 AI 回溯体感。
