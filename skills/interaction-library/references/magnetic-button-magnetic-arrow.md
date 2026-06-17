@@ -1,6 +1,7 @@
 ````yaml
 version: alpha
 name: magnetic-button-magnetic-arrow
+cover_video: ""
 description: >
   这是一种带有微弱磁性吸附（Magnetic Effect）与动态拉伸的回弹胶囊按钮动效。当鼠标悬停在其核心操作区（如右侧圆形箭头）时，内部元素产生非对称的吸引和膨胀，营造出一种高级的物理张力与引力感。
   触发词：磁性吸附按钮, 动态胶囊拉伸, 引力反馈, 异步回弹, 物理边缘磁吸
@@ -25,6 +26,8 @@ motion_tokens:
     arrow_circle:
       initial: { x: 0, scale: 1 }
       hover: { x: 8, scale: 1.05 }
+components: []
+effects: []
 ---
 
 # 磁性动态回弹胶囊按钮 (Magnetic Button & Arrow) 规范

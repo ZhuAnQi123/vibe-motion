@@ -1,6 +1,7 @@
 ````yaml
 version: alpha
 name: list-item-inverse-stretch-reveal
+cover_video: ""
 description: >
   这是一种带有明显物理拉伸感与反色遮罩效果的列表项切换动效。当鼠标在列表间穿梭时，黑色高亮背景块在不同项之间以一种动态拉伸、挤压并伴随错位擦除的方式流转，营造出极强的果冻般物理弹性。
   触发词：弹性反色块, 纵向拉伸切换, 错位遮罩擦除, 液体弹性高亮, 列表果冻流转
@@ -25,6 +26,8 @@ motion_tokens:
     text_content:
       initial: { color: "#000000", y: 0 }
       hover_active: { color: "#ffffff", y: [0, -4, 0] }
+components: []
+effects: []
 ---
 
 # 弹性反色拉伸列表 (List Item Inverse Stretch Reveal) 规范

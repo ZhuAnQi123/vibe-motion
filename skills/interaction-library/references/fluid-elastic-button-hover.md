@@ -1,6 +1,7 @@
 ```yaml
 version: alpha
 name: fluid-elastic-button-hover
+cover_video: ""
 description: >
   一种高动态反馈的微交互按钮。鼠标悬停时，按钮通过带有强烈Q弹感和物理惯性的缩放进行反馈，迅速吸引视觉焦点并提升点击欲，适用于行动呼吁（CTA）按钮。
   触发词：按钮悬停、弹性缩放、微动效、Q弹反馈、CTA按钮
@@ -15,6 +16,8 @@ motion_tokens:
     initial: { transform: "scale(1)" }
     animate: { transform: "scale(1.08)" }
     exit: { transform: "scale(1)" }
+components: []
+effects: []
 ---
 
 # 弹性缩放微动效按钮规范

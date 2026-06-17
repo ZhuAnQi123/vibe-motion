@@ -1,6 +1,7 @@
 ````yaml
 version: alpha
 name: multi-column-accordion-reveal
+cover_video: ""
 description: >
   一种基于多列卡片展开与文字渐进式排版呈现的交互。通过平滑的缩放和延迟文字淡入，将大量信息在有限空间内进行优雅的切换与展示，适用于官网落地页、产品特性介绍及卡片式风琴折叠菜单。
   触发词：卡片折叠、风琴式展开、多列交替、文本渐进淡入、网格布局切换
@@ -15,6 +16,8 @@ motion_tokens:
     initial: { width: "33.3%", opacity: 0.8 }
     animate: { width: "50%", opacity: 1 }
     exit: { width: "25%", opacity: 0.6 }
+components: []
+effects: []
 ---
 
 # 多列卡片风琴式展开与文本渐进淡入规范

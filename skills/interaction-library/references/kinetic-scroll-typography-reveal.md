@@ -1,6 +1,7 @@
 ```yaml
 version: alpha
 name: kinetic-scroll-typography-reveal
+cover_video: ""
 description: >
   这是一种带有明显物理阻尼感与动态遮罩擦除的卡片切换与文字启幕动效。适用于高端作品集、创意工作室官网或画廊展示等强调排版美感与视觉叙事的场景。
   触发词：视差擦除, 物理滚动切换, 动态遮罩, 文字启幕, 阻尼滑块
@@ -22,6 +23,8 @@ motion_tokens:
     initial: { opacity: 0, y: 40, clipPath: "inset(100% 0% 0% 0%)" }
     animate: { opacity: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)" }
     exit: { opacity: 0, y: -40, clipPath: "inset(0% 0% 100% 0%)" }
+components: []
+effects: []
 ---
 
 # 动力学滚动文字启幕 (Kinetic Typography Reveal) 规范

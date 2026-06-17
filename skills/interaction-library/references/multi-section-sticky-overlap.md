@@ -1,6 +1,7 @@
 ```yaml
 version: alpha
 name: multi-section-sticky-overlap
+cover_video: ""
 description: >
   一种基于大屏滚动的多层卡片堆叠与视差覆盖交互。当页面向下滚动时，当前全屏板块会被下一个板块向上推开并直接覆盖，呈现出极具空间纵深感的高级转场，适用于创意工作室、品牌官网及服务介绍页。
   触发词：页面堆叠、视差覆盖、粘性滚动、全屏卡片推开、多层级错开
@@ -15,6 +16,8 @@ motion_tokens:
     initial: { y: "100vh", scale: 1 }
     animate: { y: "0vh", scale: 1 }
     exit: { y: "0vh", scale: 0.95, opacity: 0.8 }
+components: []
+effects: []
 ---
 
 # 多层级视差堆叠覆盖转场规范

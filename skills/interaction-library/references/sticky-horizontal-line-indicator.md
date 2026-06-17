@@ -1,6 +1,7 @@
 ```yaml
 version: alpha
 name: magnetic-circular-button-hover
+cover_video: ""
 description: >
   这是一种带有明显物理引力与非对称磁性磁吸吸附的圆形按钮悬停动效。当鼠标指针移入圆形区域时，整体不仅伴随着果冻状的呼吸收缩与描边反色，内部的文本和整个黑色圆形基座更是会产生轻微的异步空间错位吸附，为微观交互注入极佳的物理生命力。
   触发词：圆形磁吸吸附, 异步空间位移, 弹性描边反色, 物理重力感, 微观呼吸弹性
@@ -25,6 +26,8 @@ motion_tokens:
     text_label:
       initial: { x: 0, y: 0, color: "#ffffff" }
       hover: { color: "#1a1a1a" }
+components: []
+effects: []
 ---
 
 # 磁性动态吸附圆形按钮 (Magnetic Circular Button Hover) 规范

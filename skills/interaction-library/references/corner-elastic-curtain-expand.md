@@ -1,6 +1,7 @@
 ````yaml
 version: alpha
 name: corner-elastic-curtain-expand
+cover_video: ""
 description: >
   这是一种极具戏剧张力与空间延伸感的右上角圆角幕布展开（全屏菜单）动效。通过将一个微小的胶囊按钮作为动效发生源，以非对称的物理弹簧速度向左下方急速膨胀展开，转化为饱满的全屏白幕，并联动内部文本的物理擦除显现。
   触发词：角落幕布展开, 胶囊源点膨胀, 视差边界流转, 异步排版显现, 物理弹性形变
@@ -25,6 +26,8 @@ motion_tokens:
     menu_items:
       initial: { opacity: 0, y: 30, skewY: 4 }
       open: { opacity: 1, y: 0, skewY: 0 }
+components: []
+effects: []
 ---
 
 # 角落弹性幕布全屏展开 (Corner Elastic Curtain Expand) 规范
