@@ -1,7 +1,8 @@
 ````yaml
 version: alpha
 name: typographic-carousel-slide
-cover_video: ""
+name_zh: "排版轮播滑动切换"
+cover_video: "../assets/typographic-carousel-slide.mov"
 description: >
   这是一种极具视觉冲击力的巨型排版视差无缝滚动（轮播）切换动效。通过巨型背景文字、段落文本以非对称的物理速度进行纵向视差推移，创造出一种宛如巨幕拉开、层级分明的空间穿梭体感。
   触发词：巨幕视差滚动, 纵向无缝轮播, 排版层级推移, 丝滑物理非对称, 空间穿梭感
@@ -28,8 +29,8 @@ motion_tokens:
       initial: { y: 120, opacity: 0 }
       animate: { y: 0, opacity: 1 }
       exit: { y: -120, opacity: 0 }
-components: []
-effects: []
+components: ["Carousel"]
+effects: ["Slide"]
 ---
 
 # 巨幕排版视差轮播 (Typographic Carousel Slide) 规范

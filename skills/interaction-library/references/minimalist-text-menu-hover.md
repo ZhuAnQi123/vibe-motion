@@ -1,7 +1,8 @@
 ```yaml
 version: alpha
 name: minimalist-text-menu-hover
-cover_video: ""
+name_zh: "极简文字菜单悬停"
+cover_video: "../assets/minimalist-text-menu-hover.mov"
 description: >
   这是一种极简主义的通栏式文本导航菜单悬停动效。通过反色背景条块的平滑纵向位移（或淡入淡出）以及隐藏箭头的平移显现，为经典列表注入高级的、具有物理质感的交互反馈。
   触发词：极简菜单高亮, 反色背景跟随, 箭头平移显现, 通栏导航, 瞬时阻尼反馈
@@ -29,8 +30,8 @@ motion_tokens:
     text:
       initial: { color: "#8a8a8a" }
       hover: { color: "#000000" }
-components: []
-effects: []
+components: ["Navigation","List","Typography"]
+effects: ["Hover"]
 ---
 
 # 极简文本菜单悬停 (Minimalist Text Menu Hover) 规范

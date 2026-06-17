@@ -1,7 +1,8 @@
 ```yaml
 version: alpha
 name: typographic-menu-preview-card
-cover_video: ""
+name_zh: "排版菜单预览卡片"
+cover_video: "../assets/typographic-menu-preview-card.mov"
 description: >
   这是一种大字报风格的文本菜单悬停联动媒体预览的动效。当鼠标划过排版字块时，文字颜色高亮，同时右侧的跟随预览卡片通过微弱的惯性位移与平滑的图片淡入淡出进行内容切换，展现极佳的丝滑体感。
   触发词：大字报菜单, 悬停联动预览, 遮罩渐变切换, 排版高亮, 视差缩放
@@ -27,8 +28,8 @@ motion_tokens:
       initial: { opacity: 0, scale: 0.95, y: 15 }
       animate: { opacity: 1, scale: 1, y: 0 }
       exit: { opacity: 0, scale: 0.98, y: -10 }
-components: []
-effects: []
+components: ["Navigation","Card"]
+effects: ["Motion"]
 ---
 
 # 文本菜单联动媒体预览 (Typographic Menu Preview Card) 规范

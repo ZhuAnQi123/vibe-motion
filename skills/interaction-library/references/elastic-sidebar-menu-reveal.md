@@ -1,7 +1,8 @@
 ````yaml
 version: alpha
 name: elastic-sidebar-menu-reveal
-cover_video: ""
+name_zh: "弹性侧边栏菜单揭示"
+cover_video: "../assets/elastic-sidebar-menu-reveal.mov"
 description: >
   一种高动态反馈的侧边栏/菜单抽屉展开与导航项动感交互。菜单面板展开时具备平滑的果冻物理回弹，内部导航项在悬停时采用自适应高亮块移动，适用于创意先锋、极简主义风格的网站全局导航。
   触发词：菜单展开、侧边栏抽屉、弹性回弹、导航悬停、高亮跟随
@@ -16,8 +17,8 @@ motion_tokens:
     initial: { x: "100%", borderRadius: "40px" }
     animate: { x: "0%", borderRadius: "24px" }
     exit: { x: "100%", borderRadius: "40px" }
-components: []
-effects: []
+components: ["Navigation"]
+effects: ["Elastic","Reveal"]
 ---
 
 # 弹性抽屉菜单与动感导航项规范

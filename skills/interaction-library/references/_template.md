@@ -1,6 +1,10 @@
 ---
 version: alpha
 name: interaction-name-analysis
+name_zh: "中文展示标题"
+cover_video: "../assets/your-video-name.mov"
+components: ["Button", "Navigation", "Modal"]
+effects: ["Elastic", "Magnetic", "Reveal"]
 description: >
   详细描述该交互的“核心体感”。例如：
   “这是一个类似 iOS 控制中心的流体扩展动效，元素展开时带有明显的阻尼感，松手时有基于初速度的惯性回弹。”
