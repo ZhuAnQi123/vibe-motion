@@ -1,6 +1,6 @@
 ```yaml
 version: alpha
-name: magnetic-circular-button-hover
+name: sticky-horizontal-line-indicator
 name_zh: "粘性横线滚动指示"
 cover_video: "../assets/sticky-horizontal-line-indicator.mov"
 description: >
