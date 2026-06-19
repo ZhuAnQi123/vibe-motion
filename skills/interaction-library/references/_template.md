@@ -2,7 +2,7 @@
 version: alpha
 name: interaction-name-analysis
 name_zh: "中文展示标题"
-cover_video: "../assets/your-video-name.mov"
+cover_video: "../assets/your-video-name.mp4"
 # 下面是一些 components 的可选例子（建议统一使用这套中文术语）
 components: ["按钮组件", "导航组件", "弹窗组件"]
 # 下面是一些 effects 的可选例子（建议统一使用这套中文术语）

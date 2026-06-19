@@ -2,7 +2,7 @@
 version: alpha
 name: kinetic-scroll-typography-reveal
 name_zh: "动能滚动文字揭示"
-cover_video: "../assets/kinetic-scroll-typography-reveal.mov"
+cover_video: "../assets/kinetic-scroll-typography-reveal.mp4"
 description: >
   这是一种带有明显物理阻尼感与动态遮罩擦除的卡片切换与文字启幕动效。适用于高端作品集、创意工作室官网或画廊展示等强调排版美感与视觉叙事的场景。
   触发词：视差擦除, 物理滚动切换, 动态遮罩, 文字启幕, 阻尼滑块

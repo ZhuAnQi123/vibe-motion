@@ -2,7 +2,7 @@
 version: alpha
 name: multi-column-accordion-reveal
 name_zh: "多列手风琴展开揭示"
-cover_video: "../assets/multi-column-accordion-reveal.mov"
+cover_video: "../assets/multi-column-accordion-reveal.mp4"
 description: >
   一种基于多列卡片展开与文字渐进式排版呈现的交互。通过平滑的缩放和延迟文字淡入，将大量信息在有限空间内进行优雅的切换与展示，适用于官网落地页、产品特性介绍及卡片式风琴折叠菜单。
   触发词：卡片折叠、风琴式展开、多列交替、文本渐进淡入、网格布局切换

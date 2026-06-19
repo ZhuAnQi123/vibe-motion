@@ -2,7 +2,7 @@
 version: alpha
 name: hand-drawn-blob-eyetracking
 name_zh: "手绘涂鸦软泥与视线追踪联动动效"
-cover_video: "../assets/hand-drawn-blob-eyetracking.mov"
+cover_video: "../assets/hand-drawn-blob-eyetracking.mp4"
 components: ["手绘画布", "视线追踪组件", "物理弹性图层"]
 effects:
   ["线条逐帧抖动 (Line Boiling)", "果冻形变 (Squish/Blob)", "瞳孔约束位移"]
@@ -42,7 +42,7 @@ motion_tokens:
 
 ## 2. 媒体参考 (Reference Asset)
 
-- **文件路径**：`../assets/录屏2026-06-18 14.44.57.mov`
+- **文件路径**：`../assets/录屏2026-06-18 14.44.57.mp4`
 - **来源引用**：手绘风格创意前端交互
 
 ## 3. 技术实现要点 (Implementation Details)

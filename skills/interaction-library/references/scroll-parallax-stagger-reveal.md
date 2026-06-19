@@ -2,7 +2,7 @@
 version: alpha
 name: scroll-parallax-stagger-reveal
 name_zh: "流式滚动视差与非对称交错揭示"
-cover_video: "../assets/scroll-parallax-stagger-reveal.mov"
+cover_video: "../assets/scroll-parallax-stagger-reveal.mp4"
 components: ["卡片组件", "图文流布局", "网格系统"]
 effects: ["滚动视差", "揭示过渡", "异步位移"]
 interaction_types: ["滚动联动", "视差悬浮"]
@@ -46,7 +46,7 @@ motion_tokens:
 
 > 动态行为源自实际网页的滚动行为捕获。
 
-- **文件路径**：`../assets/录屏2026-06-17 21.05.54.mov`
+- **文件路径**：`../assets/录屏2026-06-17 21.05.54.mp4`
 - **来源引用**：SafeToNet 官方网站产品介绍流
 
 ## 3. 技术实现要点 (Implementation Details)

@@ -2,7 +2,7 @@
 version: alpha
 name: typographic-accordion-push
 name_zh: "瑞士粗野主义：巨幅排版手风琴联动挤压"
-cover_video: "../assets/typographic-accordion-push.mov"
+cover_video: "../assets/typographic-accordion-push.mp4"
 components: ["手风琴折叠栏", "巨幅文本条", "内容揭示容器"]
 effects: ["弹性高度动态挤压", "层级交错渐显 (Stagger Reveal)", "边界顺滑裁切"]
 interaction_types: ["点击切换", "布局弹性联动"]
@@ -38,7 +38,7 @@ motion_tokens:
 
 ## 2. 媒体参考 (Reference Asset)
 
-- **文件路径**：`../assets/录屏2026-06-18 16.20.30.mov`
+- **文件路径**：`../assets/录屏2026-06-18 16.20.30.mp4`
 - **来源引用**：The Push / 青年音乐创意运动官网
 
 ## 3. 技术实现要点 (Implementation Details)

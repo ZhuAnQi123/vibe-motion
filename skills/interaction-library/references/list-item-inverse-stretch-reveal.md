@@ -2,7 +2,7 @@
 version: alpha
 name: list-item-inverse-stretch-reveal
 name_zh: "列表项反向拉伸揭示"
-cover_video: "../assets/list-item-inverse-stretch-reveal.mov"
+cover_video: "../assets/list-item-inverse-stretch-reveal.mp4"
 description: >
   这是一种带有明显物理拉伸感与反色遮罩效果的列表项切换动效。当鼠标在列表间穿梭时，黑色高亮背景块在不同项之间以一种动态拉伸、挤压并伴随错位擦除的方式流转，营造出极强的果冻般物理弹性。
   触发词：弹性反色块, 纵向拉伸切换, 错位遮罩擦除, 液体弹性高亮, 列表果冻流转

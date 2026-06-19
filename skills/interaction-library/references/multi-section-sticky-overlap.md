@@ -2,7 +2,7 @@
 version: alpha
 name: multi-section-sticky-overlap
 name_zh: "多区块粘性叠层滚动"
-cover_video: "../assets/multi-section-sticky-overlap.mov"
+cover_video: "../assets/multi-section-sticky-overlap.mp4"
 description: >
   一种基于大屏滚动的多层卡片堆叠与视差覆盖交互。当页面向下滚动时，当前全屏板块会被下一个板块向上推开并直接覆盖，呈现出极具空间纵深感的高级转场，适用于创意工作室、品牌官网及服务介绍页。
   触发词：页面堆叠、视差覆盖、粘性滚动、全屏卡片推开、多层级错开
