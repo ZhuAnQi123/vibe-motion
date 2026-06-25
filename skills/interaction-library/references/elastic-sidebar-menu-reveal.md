@@ -32,7 +32,7 @@ effects: ["Elastic","Reveal"]
 * **适用场景**：全面屏导航菜单、响应式移动端抽屉、独立工作室作品集导航。
 
 ## 2. 媒体参考 (Reference Asset)
-* **文件路径**：`../assets/menu-drawer-elastic-reveal.gif`
+* **文件路径**：`../assets/elastic-sidebar-menu-reveal.mp4`
 
 ## 3. 视觉配色记录 (UI Palette)
 该组件完美承接了前序页面的高级暗黑/冷淡风，但在菜单内部使用了大面积的浅色画布来提亮视觉：

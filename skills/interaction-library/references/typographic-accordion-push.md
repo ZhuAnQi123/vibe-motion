@@ -38,7 +38,7 @@ motion_tokens:
 
 ## 2. 媒体参考 (Reference Asset)
 
-- **文件路径**：`../assets/录屏2026-06-18 16.20.30.mp4`
+- **文件路径**：`../assets/typographic-accordion-push.mp4`
 - **来源引用**：The Push / 青年音乐创意运动官网
 
 ## 3. 技术实现要点 (Implementation Details)

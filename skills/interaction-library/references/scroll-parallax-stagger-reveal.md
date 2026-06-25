@@ -46,7 +46,7 @@ motion_tokens:
 
 > 动态行为源自实际网页的滚动行为捕获。
 
-- **文件路径**：`../assets/录屏2026-06-17 21.05.54.mp4`
+- **文件路径**：`../assets/scroll-parallax-stagger-reveal.mp4`
 - **来源引用**：SafeToNet 官方网站产品介绍流
 
 ## 3. 技术实现要点 (Implementation Details)

@@ -31,7 +31,7 @@ effects: ["Elastic","Hover"]
 * **适用场景**：网页核心转化入口（如“立即预订”、“提交订单”、“加入购物车”等核心 CTA 按钮）。
 
 ## 2. 媒体参考 (Reference Asset)
-* **文件路径**：`../assets/book-unit-button-hover.gif`
+* **文件路径**：`../assets/fluid-elastic-button-hover.mp4`
 
 ## 3. 视觉配色记录 (UI Palette)
 

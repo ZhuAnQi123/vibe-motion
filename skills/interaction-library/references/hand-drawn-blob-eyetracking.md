@@ -42,7 +42,7 @@ motion_tokens:
 
 ## 2. 媒体参考 (Reference Asset)
 
-- **文件路径**：`../assets/录屏2026-06-18 14.44.57.mp4`
+- **文件路径**：`../assets/hand-drawn-blob-eyetracking.mp4`
 - **来源引用**：手绘风格创意前端交互
 
 ## 3. 技术实现要点 (Implementation Details)

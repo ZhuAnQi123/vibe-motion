@@ -32,7 +32,7 @@ effects: ["Sticky"]
 * **适用场景**：故事性叙述页面、大类业务板块切换（如：Brand Identities -> Smart Development -> Marketing Campaigns）。
 
 ## 2. 媒体参考 (Reference Asset)
-* **文件路径**：`../assets/brand-services-sticky-overlap.gif`
+* **文件路径**：`../assets/multi-section-sticky-overlap.mp4`
 
 ## 3. 视觉配色记录 (UI Palette)
 该页面采用了高级的暗黑主义与极简灰调相交替的冷淡风设计，通过微妙的色彩深浅交替打破长页面的单调：

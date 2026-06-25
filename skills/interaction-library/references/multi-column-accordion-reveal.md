@@ -31,7 +31,7 @@ effects: ["Reveal"]
 * **适用场景**：多栏目特性介绍、团队介绍、详情卡片扩展。
 
 ## 2. 媒体参考 (Reference Asset)
-* **文件路径**：`../assets/screen-recording-2026-06-14.gif`
+* **文件路径**：`../assets/multi-column-accordion-reveal.mp4`
 
 ## 3. 视觉配色记录 (UI Palette)
 为了完美还原该设计，以下是视频中提取的核心色彩令牌（Color Tokens）：

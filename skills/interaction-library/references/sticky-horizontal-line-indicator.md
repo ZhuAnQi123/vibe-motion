@@ -39,7 +39,7 @@ effects: ["Sticky"]
 - **适用场景**：独立创意工作室官网的全局大核心 CTA、高端作品集案例跳转按钮、全屏滚动到结尾处的“触点激活（Get in Touch）”圆形磁吸块。
 
 ## 2. 媒体参考 (Reference Asset)
-- **文件路径**：`../assets/magnetic-circular-button-hover.mp4`
+- **文件路径**：`../assets/sticky-horizontal-line-indicator.mp4`
 
 ## 3. Technical Implementation Details (技术实现要点)
 ### 推荐库
