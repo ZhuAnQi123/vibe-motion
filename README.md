@@ -18,7 +18,6 @@ UI 设计系统（如颜色、间距）决定了界面**“长什么样”**，�
        └── skills/
            └── interaction-library/
                ├── SKILL.md                 # 路由大脑：内部根据 Vibes 维护索引
-               ├── assets/                  # 存放配套的动效演示视频或 GIF
                └── references/
                    ├── fluid-tabs.md        # 带有 Vibe & Interaction 标签的规范文件
                    └── typographic-menu.md
@@ -52,9 +51,11 @@ UI 设计系统（如颜色、间距）决定了界面**“长什么样”**，�
 
 ### 1. 准备资产 (Assets)
 
-- 录制该动效的高质量预览视频（推荐使用 MP4 格式，控制在 2MB 以内，或者使用 GIF）。
-- 将视频文件放入本仓库的 `skills/interaction-library/assets/` 目录下。
-- **注意**：本仓库采用“随仓库存储”方案，Web 端在构建时会自动读取并展示这些本地视频。
+- 录制该动效的高质量预览视频（推荐 MP4 格式，控制在 2MB 以内）。
+- 将视频上传至 Cloudflare R2 存储桶（与现有动效同一 bucket）。
+- **命名规范**：文件名须与规范 `name` 字段一致，例如 `magnetic-circular-button-hover.mp4`。
+- **CDN 地址**：`https://pub-78bb53484bcd4179b692b8ebeee0e014.r2.dev/{filename}.mp4`
+- **注意**：视频不再随 Git 仓库提交，Web 端构建时会根据 `cover_video` 中的文件名自动拼接 CDN URL。
 
 ### 2. 创建规范文件
 
@@ -64,15 +65,15 @@ UI 设计系统（如颜色、间距）决定了界面**“长什么样”**，�
 ````yaml
 version: alpha
 name: magnetic-circular-button-hover
-cover_video: "../assets/magnetic-button.mp4" # 必须填写相对路径
+cover_video: "../assets/magnetic-circular-button-hover.mp4" # 填写文件名（相对路径格式，构建时解析为 CDN URL）
 components: ["Button", "CTA"]                # 明确组件归属（如 Button, Navigation, Modal）
 effects: ["Magnetic", "Elastic"]             # 明确动效特征（如 Elastic, Reveal, Fluid）
 `````
 
-_注：Web 端展示卡片时，会自动读取 `cover_video` 进行循环播放，并提取 `components` 和 `effects` 作为标签。_
+_注：Web 端展示卡片时，会根据 `cover_video` 的文件名从 CDN 拉取视频循环播放，并提取 `components` 和 `effects` 作为标签。_
 
 ## 📁 目录说明
 
 - `skills/interaction-library/SKILL.md`：给 Cursor Agent 的“路由大脑”。
 - `skills/interaction-library/references/`：存放具体的动效拆解参数文件（`.md`）。
-- `skills/interaction-library/assets/`：存放配套的动效演示视频或 GIF，方便你和 AI 回溯体感。
+- 动效演示视频托管于 Cloudflare R2 CDN，不再存放于本仓库。

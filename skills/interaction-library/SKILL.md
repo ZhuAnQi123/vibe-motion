@@ -17,7 +17,7 @@ description: 按触发词加载预设的高级交互动效与微交互实现方�
 |---|---|---|---|
 | fluid-tabs | 流体标签、滑动Tab、Apple风Tab | [references/fluid-tabs.md](references/fluid-tabs.md) | `assets/fluid-tabs.gif` |
 
-> **提示**：新增交互时，复制 `references/_template.md` 并填写参数，将动图/视频放入 `assets/` 目录，随后在本表追加记录。
+> **提示**：新增交互时，复制 `references/_template.md` 并填写参数，将演示视频上传至 Cloudflare R2（文件名与 `name` 字段一致），随后在本表追加记录。
 
 ## 输出模板
 
@@ -39,7 +39,7 @@ description: 按触发词加载预设的高级交互动效与微交互实现方�
 [具体的 React/Vue/CSS 代码]
 
 ## 参考素材
-- 查看效果：[输出对应的本地媒体相对路径，如 `assets/xxx.gif`]
+- 查看效果：[输出 CDN 视频地址，如 `https://pub-78bb53484bcd4179b692b8ebeee0e014.r2.dev/xxx.mp4`]
 ```
 
 ## 决策规则

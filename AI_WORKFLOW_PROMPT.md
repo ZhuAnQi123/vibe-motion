@@ -87,7 +87,8 @@ motion_tokens:
 ## 2. 媒体参考 (Reference Asset)
 
 - **原视频/演示网站**：[填入原视频链接]
-- **离线文件路径**：`../assets/[推测一个合适的文件名，如 demo.gif]`
+- **CDN 视频地址**：`https://pub-78bb53484bcd4179b692b8ebeee0e014.r2.dev/[与 name 字段同名的文件名].mp4`
+- **cover_video 字段**：`../assets/[文件名].mp4`（仅作文件名标识，视频实际托管于 Cloudflare R2）
 
 ## 3. 技术实现要点 (Implementation Details)
 
