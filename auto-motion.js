@@ -258,18 +258,32 @@ async function main() {
   }
   console.log("\n✅ 视频预处理完成，准备开始分析！\n");
 
-  // 7. 构建提示词
+  // 7. 构建提示词（动态注入真正的 _template.md）
+  const templatePath = path.join(__dirname, "_template.md");
+  let templateContent = "";
+  if (await fileExists(templatePath)) {
+    templateContent = await fse.readFile(templatePath, "utf-8");
+  } else {
+    console.warn("⚠️ 未找到 _template.md，将回退使用内置默认格式");
+  }
+
   const prompt = `
-你是一位全球顶尖的动效设计师与前端架构师。
+    你是一位全球顶尖的动效设计师与前端架构师。
 
-请仔细观察我发送的界面交互视频，并按照以下模板进行逆向工程分析。
+    请仔细观察我发送的界面交互视频，并按照以下模板进行逆向工程分析。
 
-网站 URL（供参考上下文）: ${websiteUrl}
+    网站 URL（供参考上下文）: ${websiteUrl}
 
-${promptTemplate}
+    ${promptTemplate}
 
-请严格按照上述模板的格式输出 Markdown 规范文件。
-`;
+    ⚠️【硬性要求】：请忽略上面 Prompt 中可能存在的旧格式说明，你必须严格使用下方《最新动效规范模板》中的 YAML 属性名和 Markdown 标题结构来输出你的分析结果：
+
+    ================ 最新动效规范模板 ================
+    ${templateContent}
+    ================================================
+
+    请严格按照上述模板的格式输出 Markdown 规范文件。
+  `;
 
   // 8. 调用 Gemini API 分析视频
   console.log("🤖 调用 Gemini API 分析视频...");
