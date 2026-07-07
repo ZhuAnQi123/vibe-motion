@@ -1,5 +1,5 @@
 ---
-version: beta-v2
+version: alpha
 name: scroll-driven-circular-carousel
 name_zh: "滚动驱动圆弧传送带交互"
 cover_video: "../assets/scroll-driven-circular-carousel.mp4"
@@ -11,6 +11,9 @@ description: >
   这是一个由页面滚动驱动的圆弧传送带叙事交互。随着用户向下滚动，底部的巨大圆形刻度盘（轨道）发生旋转，原本位于两侧的卡片/数字（"01", "02", "03"）和插画元素沿着弧形轨道依次切入视觉中心，并相对应地伴随淡入、缩放与微弱的浮动物理感，形成了一种沉浸式的产品特点探索体验。
   触发词：[滚动驱动、圆弧旋转、切入切出、叙事传送带]
 website: "https://buckssauce.com/"
+preview:
+  backgroundColor: "#0d0a07"
+  textColor: "#FFFFFF"
 
 # ==========================================
 # VISION-AGENT GUIDE: 动效物理预设词典

@@ -1,16 +1,18 @@
 ---
-version: beta-v2
-name: scroll-driven-circular-carousel
-name_zh: "滚动驱动圆弧传送带交互"
-cover_video: "../assets/scroll-driven-circular-carousel.mp4"
-cdn_video_url: "https://pub-78bb53484bcd4179b692b8ebeee0e014.r2.dev/scroll-driven-carousel.mp4"
-components: ["Carousel", "ScrollWrapper"]
-effects: ["Fluid Expand", "Scroll-driven"]
-interaction_types: ["Scroll-driven"]
+version: alpha
+name: bento-button-stagger-hover
+name_zh: "便当盒按钮交错悬停"
+cover_video: "../assets/bento-button-stagger-hover.mp4"
+cdn_video_url: "https://pub-78bb53484bcd4179b692b8ebeee0e014.r2.dev/bento-button-stagger-hover.mp4"
+components: ["Button", "Grid"]
+effects: ["Elastic", "Stagger"]
+interaction_types: ["Hover Feedback"]
+preview:
+  backgroundColor: "#0d0a07"
+  textColor: "#FFFFFF"
 description: >
-  这是一个由页面滚动驱动的圆弧传送带叙事交互。随着用户向下滚动，底部的巨大圆形刻度盘（轨道）发生旋转，原本位于两侧的卡片/数字（"01", "02", "03"）和插画元素沿着弧形轨道依次切入视觉中心，并相对应地伴随淡入、缩放与微弱的浮动物理感，形成了一种沉浸式的产品特点探索体验。
-  触发词：[滚动驱动、圆弧旋转、切入切出、叙事传送带]
-website: "https://buckssauce.com/"
+  这是一个便当盒布局中按钮的交错悬停交互规范。
+website: "https://vibe-ui-prompt.online"
 
 # ==========================================
 # VISION-AGENT GUIDE: 动效物理预设词典
