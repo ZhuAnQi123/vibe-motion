@@ -1,3 +1,4 @@
+```yaml
 ---
 version: alpha
 name: scroll-driven-circular-carousel
@@ -37,7 +38,7 @@ motion_tokens:
     active_center: { opacity: 1, rotate: 0, scale: 1 }
     right_offscreen: { opacity: 0.2, rotate: 30, scale: 0.8 }
 ---
-
+```
 # 滚动驱动圆弧传送带交互 / Scroll-driven Circular Carousel Specification & Implementation Protocol
 
 ## 1. Interaction & Feel Vibe (动效体感)

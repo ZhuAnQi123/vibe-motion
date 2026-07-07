@@ -4,12 +4,12 @@ name: interaction-name-analysis
 name_zh: "动效中文名称"
 cover_video: "../assets/replace-with-name.mp4" # 必须直接替换为 name 字段的实际值，例如 ../assets/donmolinico-intro-menu-hover.mp4
 cdn_video_url: "https://pub-78bb53484bcd4179b692b8ebeee0e014.r2.dev/replace-with-name.mp4" # 必须直接替换为 name 字段的实际值
+domains: ["SaaS", "Portfolio", "Creative"] # 挑选 1-3 个适用领域，便于 Web 筛选
+aesthetics: ["Neo-Brutalism", "Soft Minimalism", "Dark mode first"] # 挑选 1-3 个适用审美
 components: ["Card", "Button", "Dialog"] # 统一使用英文组件名，方便代码映射
 effects: ["Spring Bounce", "Stagger Entrance", "Fluid Expand"]
 interaction_types: ["Hover Feedback", "Click Transition", "Scroll-driven"]
-preview:
-  backgroundColor: "#171717"
-  textColor: "#FFFFFF"
+preview: { backgroundColor: "#171717", textColor: "#FFFFFF" }
 description: >
   详细描述该交互的“核心体感”。例如：
   “这是一个类似 iOS 控制中心的流体扩展动效，元素展开时带有明显的阻尼感，松手时有基于初速度的惯性回弹。”
