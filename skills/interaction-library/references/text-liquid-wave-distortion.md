@@ -2,7 +2,7 @@
 version: alpha
 name: text-liquid-wave-distortion
 name_zh: "文字局部近接液态波纹动效"
-cover_video: "../assets/portfolio-text-wave.mp4"
+cover_video: "../assets/text-liquid-wave-distortione.mp4"
 tags: ["Proximity", "Hover"]
 preview: { backgroundColor: "#fcf5ec", textColor: "#171717" }
 description: >
@@ -40,7 +40,7 @@ motion_tokens:
 
 ## 2. 媒体参考 (Reference Asset)
 
-- **文件路径**：`../assets/portfolio-text-wave.gif`
+- **文件路径**：`../assets/text-liquid-wave-distortione.gif`
 - **来源引用**：https://aikawakenichi.com/ 视频 00:00 - 00:03。对比用户实验文件（录屏2026-06-27 18.11.42.mov）中的全局晃动，必须严格限制受控范围。
 
 ## 3. 技术实现要点 (Implementation Details)
