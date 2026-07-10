@@ -3,11 +3,7 @@ version: alpha
 name: text-liquid-wave-distortion
 name_zh: "文字局部近接液态波纹动效"
 cover_video: "../assets/portfolio-text-wave.mp4"
-domains: ["个人作品集 (Portfolio)", "创意设计"]
-aesthetics: ["极高对比度", "微质感"]
-components: ["Typography", "SplitText"]
-effects: ["Liquid", "Distortion", "Proximity"]
-interaction_types: ["鼠标悬停反馈 (Hover)", "邻近元素联动 (Proximity)"]
+tags: ["Proximity", "Hover"]
 preview: { backgroundColor: "#fcf5ec", textColor: "#171717" }
 description: >
   这是一种应用于大字重网页排版的“鼠标邻近液态水波纹”动效。
