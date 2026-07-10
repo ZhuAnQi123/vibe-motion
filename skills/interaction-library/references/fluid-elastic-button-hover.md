@@ -17,8 +17,7 @@ motion_tokens:
     initial: { transform: "scale(1)" }
     animate: { transform: "scale(1.08)" }
     exit: { transform: "scale(1)" }
-components: ["Button"]
-effects: ["Elastic","Hover"]
+tags: ["Elastic", "Hover", "Button"]
 ---
 
 # 弹性缩放微动效按钮规范

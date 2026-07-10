@@ -29,8 +29,7 @@ motion_tokens:
       initial: { y: 120, opacity: 0 }
       animate: { y: 0, opacity: 1 }
       exit: { y: -120, opacity: 0 }
-components: ["Carousel"]
-effects: ["Slide"]
+tags: ["Scroll", "Carousel"]
 ---
 
 # 巨幕排版视差轮播 (Typographic Carousel Slide) 规范

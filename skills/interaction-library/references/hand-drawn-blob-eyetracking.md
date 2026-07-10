@@ -3,10 +3,7 @@ version: alpha
 name: hand-drawn-blob-eyetracking
 name_zh: "手绘涂鸦软泥与视线追踪联动动效"
 cover_video: "../assets/hand-drawn-blob-eyetracking.mp4"
-components: ["手绘画布", "视线追踪组件", "物理弹性图层"]
-effects:
-  ["线条逐帧抖动 (Line Boiling)", "果冻形变 (Squish/Blob)", "瞳孔约束位移"]
-interaction_types: ["鼠标跟随", "多层视差推离"]
+tags: ["Proximity", "Hover"]
 description: >
   这是一个极具个性和趣味性的手绘涂鸦风交互空间。中心是由粉色不规则线条构成的“软泥怪”面部，其边缘伴随着手绘特有的随机微幅抖动。当鼠标在屏幕上移动时，面部的眼睛会产生平滑的视线追踪；同时，原本重叠在面部下方的文字（Hello, Design, World, Play, Let's）会被一种无形的“排斥力”向四周推开，形成非线性的发散视差。
 trigger_words: [手绘风、逐帧抖动、史莱姆形变、视线追踪、交互排斥]

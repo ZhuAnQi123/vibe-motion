@@ -27,8 +27,7 @@ motion_tokens:
     text_label:
       initial: { x: 0, y: 0, color: "#ffffff" }
       hover: { color: "#1a1a1a" }
-components: ["Button"]
-effects: ["Magnetic","Hover"]
+tags: ["Magnetic", "Hover", "Button"]
 ---
 
 # 磁性动态吸附圆形按钮 (Magnetic Circular Button Hover) 规范

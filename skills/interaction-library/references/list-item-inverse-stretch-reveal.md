@@ -27,8 +27,7 @@ motion_tokens:
     text_content:
       initial: { color: "#000000", y: 0 }
       hover_active: { color: "#ffffff", y: [0, -4, 0] }
-components: ["List"]
-effects: ["Reveal"]
+tags: ["Elastic", "Reveal", "Hover"]
 ---
 
 # 弹性反色拉伸列表 (List Item Inverse Stretch Reveal) 规范

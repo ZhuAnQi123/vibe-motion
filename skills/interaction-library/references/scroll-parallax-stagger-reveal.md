@@ -3,9 +3,7 @@ version: alpha
 name: scroll-parallax-stagger-reveal
 name_zh: "流式滚动视差与非对称交错揭示"
 cover_video: "../assets/scroll-parallax-stagger-reveal.mp4"
-components: ["卡片组件", "图文流布局", "网格系统"]
-effects: ["滚动视差", "揭示过渡", "异步位移"]
-interaction_types: ["滚动联动", "视差悬浮"]
+tags: ["Scroll", "Reveal", "Card"]
 description: >
   这是一个基于页面滚动深度的非对称视差联动动效。当用户向下滚动时，左侧大字体的文本流以标准速率位移，而右侧的插图、卡片及背景色块以略微滞后或加速的“异步速度”向上推移。这种物理速度差消除了传统网页滚动的生硬感，营造出元素仿佛悬浮在不同空间维度的“流体层叠感”。
 trigger_words: [滚动视差、异步交错、非对称流、视觉层叠]

@@ -30,8 +30,7 @@ motion_tokens:
     text:
       initial: { color: "#8a8a8a" }
       hover: { color: "#000000" }
-components: ["Navigation","List","Typography"]
-effects: ["Hover"]
+tags: ["Hover"]
 ---
 
 # 极简文本菜单悬停 (Minimalist Text Menu Hover) 规范

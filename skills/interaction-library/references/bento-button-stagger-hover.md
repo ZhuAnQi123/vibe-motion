@@ -4,11 +4,7 @@ name: bento-button-stagger-hover
 name_zh: "便当盒按钮交错悬停"
 cover_video: "../assets/bento-button-stagger-hover.mp4"
 cdn_video_url: "https://pub-78bb53484bcd4179b692b8ebeee0e014.r2.dev/bento-button-stagger-hover.mp4"
-domains: ["SaaS", "产品展示", "个人主页"]
-aesthetics: ["便当盒布局", "新粗野主义"]
-components: ["Button", "Grid"]
-effects: ["Elastic", "Stagger"]
-interaction_types: ["Hover Feedback"]
+tags: ["Elastic", "Hover", "Button"]
 preview: { backgroundColor: "#0d0a07", textColor: "#FFFFFF" }
 description: >
   这是一个便当盒布局中按钮的交错悬停交互规范。

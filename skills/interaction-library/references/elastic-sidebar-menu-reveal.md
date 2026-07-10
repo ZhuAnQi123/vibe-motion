@@ -17,8 +17,7 @@ motion_tokens:
     initial: { x: "100%", borderRadius: "40px" }
     animate: { x: "0%", borderRadius: "24px" }
     exit: { x: "100%", borderRadius: "40px" }
-components: ["Navigation"]
-effects: ["Elastic","Reveal"]
+tags: ["Elastic", "Reveal", "Button"]
 ---
 
 # 弹性抽屉菜单与动感导航项规范

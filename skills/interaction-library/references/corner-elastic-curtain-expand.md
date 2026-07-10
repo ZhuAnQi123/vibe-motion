@@ -27,8 +27,7 @@ motion_tokens:
     menu_items:
       initial: { opacity: 0, y: 30, skewY: 4 }
       open: { opacity: 1, y: 0, skewY: 0 }
-components: ["Container"]
-effects: ["Elastic","Expand"]
+tags: ["Elastic", "Curtain", "Click"]
 ---
 
 # 角落弹性幕布全屏展开 (Corner Elastic Curtain Expand) 规范

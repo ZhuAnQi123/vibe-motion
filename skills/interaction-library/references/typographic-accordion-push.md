@@ -3,9 +3,7 @@ version: alpha
 name: typographic-accordion-push
 name_zh: "瑞士粗野主义：巨幅排版手风琴联动挤压"
 cover_video: "../assets/typographic-accordion-push.mp4"
-components: ["手风琴折叠栏", "巨幅文本条", "内容揭示容器"]
-effects: ["弹性高度动态挤压", "层级交错渐显 (Stagger Reveal)", "边界顺滑裁切"]
-interaction_types: ["点击切换", "布局弹性联动"]
+tags: ["Elastic", "Accordion", "Click"]
 description: >
   这是一种充满现代粗野主义（Brutalist）与瑞士平面设计感的手风琴折叠动效。每一个分类都以极具视觉冲击力的巨幅黑色粗体字、高饱和度纯色块（蓝、绿、紫、粉、黄）和背景图片叠加呈现。当用户点击其中一个条目时，该条目会以带有明显惯性缓冲的节奏平滑“膨胀”展开，展示内部的详细内容与行动按钮（CTA），而其他未被选中的条目则会被优雅地向上或向下“推挤”缩小。
 trigger_words: [粗野主义、巨幅排版、手风琴联动、动态挤压、高饱和色块]

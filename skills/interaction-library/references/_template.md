@@ -2,9 +2,9 @@ version: beta-v2
 name: interaction-name-analysis
 name_zh: "动效中文名称"
 cover_video: "../assets/your-video-name.mp4"
-components: ["Card", "Button", "Dialog"] # 统一使用英文组件名，方便代码映射
-effects: ["Spring Bounce", "Stagger Entrance", "Fluid Expand"]
-interaction_types: ["Hover Feedback", "Click Transition", "Scroll-driven"]
+# 📢 统一标签规范：必须且只能从以下 12 个精选 Motion 标签中选择 1~3 个放入数组中
+# 可选标签：["Elastic", "Magnetic", "Scroll", "Reveal", "Proximity", "Curtain", "Hover", "Button", "Card", "Carousel", "Accordion", "Click"]
+tags: ["Elastic", "Hover", "Button"]
 description: >
 详细描述该交互的“核心体感”。例如：
 “这是一个类似 iOS 控制中心的流体扩展动效，元素展开时带有明显的阻尼感，松手时有基于初速度的惯性回弹。”
@@ -158,4 +158,3 @@ export const InteractionComponent = () => {
 
 - ❌ **DON'T**: Do NOT let elements disappear instantly from the DOM when they are closed or unmounted.
 - **DO**: You must wrap conditional rendering with `<AnimatePresence>` (Framer Motion) or leverage CSS transition-end event listeners to ensure the `exit` state plays out fully before node destruction.
-

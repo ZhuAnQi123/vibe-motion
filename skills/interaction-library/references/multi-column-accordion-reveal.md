@@ -17,8 +17,7 @@ motion_tokens:
     initial: { width: "33.3%", opacity: 0.8 }
     animate: { width: "50%", opacity: 1 }
     exit: { width: "25%", opacity: 0.6 }
-components: ["Accordion"]
-effects: ["Reveal"]
+tags: ["Reveal", "Accordion", "Click"]
 ---
 
 # 多列卡片风琴式展开与文本渐进淡入规范

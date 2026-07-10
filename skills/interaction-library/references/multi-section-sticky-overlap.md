@@ -17,8 +17,7 @@ motion_tokens:
     initial: { y: "100vh", scale: 1 }
     animate: { y: "0vh", scale: 1 }
     exit: { y: "0vh", scale: 0.95, opacity: 0.8 }
-components: ["Container"]
-effects: ["Sticky"]
+tags: ["Scroll", "Card"]
 ---
 
 # 多层级视差堆叠覆盖转场规范

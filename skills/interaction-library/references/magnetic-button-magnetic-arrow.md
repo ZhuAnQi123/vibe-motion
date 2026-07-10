@@ -27,8 +27,7 @@ motion_tokens:
     arrow_circle:
       initial: { x: 0, scale: 1 }
       hover: { x: 8, scale: 1.05 }
-components: ["Button"]
-effects: ["Magnetic"]
+tags: ["Magnetic", "Button"]
 ---
 
 # 磁性动态回弹胶囊按钮 (Magnetic Button & Arrow) 规范

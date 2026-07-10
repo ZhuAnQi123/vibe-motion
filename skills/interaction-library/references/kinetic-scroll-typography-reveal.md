@@ -24,8 +24,7 @@ motion_tokens:
     initial: { opacity: 0, y: 40, clipPath: "inset(100% 0% 0% 0%)" }
     animate: { opacity: 1, y: 0, clipPath: "inset(0% 0% 0% 0%)" }
     exit: { opacity: 0, y: -40, clipPath: "inset(0% 0% 100% 0%)" }
-components: ["Typography"]
-effects: ["Reveal","Scroll"]
+tags: ["Scroll", "Reveal"]
 ---
 
 # 动力学滚动文字启幕 (Kinetic Typography Reveal) 规范

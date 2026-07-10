@@ -28,8 +28,7 @@ motion_tokens:
       initial: { opacity: 0, scale: 0.95, y: 15 }
       animate: { opacity: 1, scale: 1, y: 0 }
       exit: { opacity: 0, scale: 0.98, y: -10 }
-components: ["Navigation","Card"]
-effects: ["Motion"]
+tags: ["Hover", "Card"]
 ---
 
 # 文本菜单联动媒体预览 (Typographic Menu Preview Card) 规范
