@@ -2,7 +2,15 @@ import { GoogleGenAI } from '@google/genai';
 import fs from 'fs';
 import path from 'path';
 import 'dotenv/config'; // ✨ 自动加载当前目录下的 .env 文件
+import { setGlobalDispatcher, ProxyAgent } from 'undici';
 
+// 强制将 Node.js 的全局原生 fetch 流量转发至本地代理端口
+if (process.env.HTTP_PROXY || process.env.HTTPS_PROXY) {
+  const proxyUrl = process.env.HTTP_PROXY || process.env.HTTPS_PROXY;
+  const dispatcher = new ProxyAgent({ uri: proxyUrl });
+  setGlobalDispatcher(dispatcher);
+  console.log(`📡 已成功为原生 fetch 挂载代理适配器: ${proxyUrl}`);
+}
 // 1. 初始化 Gemini API 客户端 (传一个空对象 {} 防止 SDK 内部报 undefined 错误)
 const ai = new GoogleGenAI({}); 
 

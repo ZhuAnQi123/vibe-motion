@@ -1,13 +1,15 @@
-import { chromium } from 'playwright';
-import fs from 'fs';
-import path from 'path';
-import { pipeline } from 'stream/promises';
-import { Readable } from 'stream';
+import { chromium } from "playwright";
+import fs from "fs";
+import path from "path";
+import { pipeline } from "stream/promises";
+import { Readable } from "stream";
+import "dotenv/config";
 
 async function downloadVideo(url, outputPath) {
   try {
     const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to fetch video: ${response.statusText}`);
+    if (!response.ok)
+      throw new Error(`Failed to fetch video: ${response.statusText}`);
     const fileStream = fs.createWriteStream(outputPath);
     await pipeline(Readable.fromWeb(response.body), fileStream);
     console.log(`✅ 视频成功下载至: ${outputPath}`);
@@ -17,118 +19,154 @@ async function downloadVideo(url, outputPath) {
 }
 
 async function run() {
-  console.log('🚀 正在启动浏览器...');
+  console.log("🚀 正在启动浏览器...");
   const browser = await chromium.launch({ headless: false }); // 建议保持 false 观察其批量行为
   const context = await browser.newContext({
     viewport: { width: 1440, height: 900 },
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    userAgent:
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
   });
   const page = await context.newPage();
   const TARGET_WEBSITE = process.env.TARGET_WEBSITE;
 
   try {
-    console.log('🌐 正在打开 website...');
-    await page.goto(TARGET_WEBSITE, { waitUntil: 'networkidle' });
+    console.log("🌐 正在打开 website..." + TARGET_WEBSITE);
+    await page.goto(TARGET_WEBSITE, { waitUntil: "networkidle" });
 
-    // 1. 切换到 Motion 视图
+    // 1. 切换到 Motion 视图 (优化：增加多情况兼容)
     console.log('🎯 正在寻找并点击 "Motion" 筛选标签...');
-    const motionButton = page.locator('button:has-text("Motion"), a:has-text("Motion"), div:has-text("Motion")').first();
-    await motionButton.waitFor({ state: 'visible', timeout: 5000 });
+    const motionButton = page
+      .locator("button, a, div")
+      .filter({ hasText: /^Motion$/i }) // 精准匹配单词 Motion，忽略大小写
+      .first();
+
+    await motionButton.waitFor({ state: "visible", timeout: 8000 });
     await motionButton.click();
-    console.log('✨ 已成功切换到 Motion 筛选视图，等待列表加载...');
-    await page.waitForTimeout(3000);
+    console.log("✨ 已点击 Motion 筛选，等待列表刷新...");
+    // 优化：与其死等3秒，不如等待网络空闲
+    await page.waitForLoadState("networkidle");
 
     // 2. 模拟向下滚动，加载更多卡片
-    console.log('📜 正在向下滚动页面以加载更多动态内容...');
-    for (let i = 0; i < 3; i++) { // 滚动3次，大约能刷出几十个。你可以根据需要调大循环次数
+    console.log("📜 正在向下滚动页面以加载更多动态内容...");
+    for (let i = 0; i < 3; i++) {
       await page.evaluate(() => window.scrollBy(0, window.innerHeight * 2));
       await page.waitForTimeout(1500);
     }
 
-    // 3. 收集当前页面上所有属于 Motion 的卡片选择器或索引
-    // 页面上的作品链接通常带有固定格式，或者我们直接找网格中的 a 标签
+    // 3. 收集当前页面上所有属于 Motion 的卡片链接
     const cardSelectors = await page.evaluate(() => {
-      // 找到主要内容区域里带有跳转箭头的或者卡片链接
-      const links = Array.from(document.querySelectorAll('main a, .grid a, [class*="card"] a'));
-      // 过滤掉左侧边栏、工具栏里无关的链接，只保留真正作品的 href
+      const links = Array.from(
+        document.querySelectorAll('main a, .grid a, [class*="card"] a'),
+      );
       return links
-        .map(a => a.href)
-        .filter(href => href && (href.includes('/i/') || href.includes('/post/')));
+        .map((a) => a.href)
+        .filter(
+          (href) => href && (href.includes("/i/") || href.includes("/post/")),
+        );
     });
 
-    // 去重
     const uniqueCardUrls = [...new Set(cardSelectors)];
-    console.log(`📚 成功收集到 ${uniqueCardUrls.length} 个 Motion 条目链接。准备开始批量抓取...`);
+    console.log(`📚 成功收集到 ${uniqueCardUrls.length} 个 Motion 条目链接。`);
 
-    // 限制抓取数量，这里示例先抓前 10 个（你可以改为 uniqueCardUrls.length 抓取全部）
-    const maxItemsToFetch = Math.min(uniqueCardUrls.length, 10); 
-    const outputBaseDir = path.join(process.cwd(), 'output');
+    const maxItemsToFetch = Math.min(uniqueCardUrls.length, 10);
+    const outputBaseDir = path.join(process.cwd(), "output");
     if (!fs.existsSync(outputBaseDir)) fs.mkdirSync(outputBaseDir);
 
-    // 4. 循环遍历每一个动效详情页
+    // 💡 核心修改：循环遍历详情页
     for (let index = 0; index < maxItemsToFetch; index++) {
       const cardUrl = uniqueCardUrls[index];
       console.log(`\n--------------------------------------------------`);
-      console.log(`🔄 [${index + 1}/${maxItemsToFetch}] 正在跳转至详情: ${cardUrl}`);
-      
+      console.log(
+        `🔄 [${index + 1}/${maxItemsToFetch}] 正在跳转至详情: ${cardUrl}`,
+      );
+
+      // 💡 关键改动：为每个条目创建独立的独立页面，防止互相污染和崩溃
+      const detailPage = await context.newPage();
+
       try {
-        // 直接新开或跳转到详情页 URL，这样提取数据环境最干净，不会受到主页干扰
-        await page.goto(cardUrl, { waitUntil: 'networkidle', timeout: 30000 });
-        await page.waitForSelector('video', { timeout: 10000 });
-        await page.waitForTimeout(1000); // 稳妥等待动画加载完毕
+        // 使用新页面跳转
+        await detailPage.goto(cardUrl, {
+          waitUntil: "networkidle",
+          timeout: 30000,
+        });
 
-        // 精准数据提取
-        const metaData = await page.evaluate(() => {
-          // 1. 提取标题：通常是页面唯一的 h1，或者面包屑之后的标题
+        // 增加对人机验证/加载失败的判断
+        try {
+          await detailPage.waitForSelector("video", { timeout: 8000 });
+        } catch (e) {
+          console.log(
+            `⚠️ 页面可能未加载出视频元素(可能触发了验证码或格式不同)，跳过此条目。`,
+          );
+          continue;
+        }
+
+        await detailPage.waitForTimeout(1000);
+
+        // 精准数据提取 (改用 detailPage)
+        const metaData = await detailPage.evaluate(() => {
           const titleEl = document.querySelector('h1, [class*="title"]');
-          const title = titleEl ? titleEl.innerText.trim() : 'Unknown Title';
+          const title = titleEl ? titleEl.innerText.trim() : "Unknown Title";
 
-          // 2. 提取描述：在详情面板中，通常紧跟在标题和作者后面的那个段落
-          // 排除包含 "Subscribe" 或 "online" 的全局段落
-          const pNodes = Array.from(document.querySelectorAll('p, [class*="description"]'));
-          let description = '';
+          const pNodes = Array.from(
+            document.querySelectorAll('p, [class*="description"]'),
+          );
+          let description = "";
           for (const p of pNodes) {
-            const txt = p.innerText || '';
-            if (txt.length > 20 && !txt.includes('Subscribe') && !txt.includes('online')) {
+            const txt = p.innerText || "";
+            if (
+              txt.length > 20 &&
+              !txt.includes("Subscribe") &&
+              !txt.includes("online")
+            ) {
               description = txt.trim();
               break;
             }
           }
 
-          // 3. 提取侧边栏/信息栏的各项标签 (Source, Category, Style, Color, Interaction)
-          const info = { source: '', category: '', style: [], color: '', interaction: '' };
-          
-          // 遍历全页所有的 div，寻找包含特定文本的项目
-          const allElements = Array.from(document.querySelectorAll('div, tr, li'));
-          allElements.forEach(el => {
-            const innerText = el.innerText || '';
-            
-            // 针对 Source 的精准解析 (结合你发来的 HTML 截图结构)
-            if (innerText.startsWith('Source') && el.querySelector('a')) {
-              const sourceLink = el.querySelector('a');
+          const info = {
+            source: "",
+            category: "",
+            style: [],
+            color: "",
+            interaction: "",
+          };
+          const allElements = Array.from(
+            document.querySelectorAll("div, tr, li"),
+          );
+          allElements.forEach((el) => {
+            const innerText = el.innerText || "";
+            if (innerText.startsWith("Source") && el.querySelector("a")) {
+              const sourceLink = el.querySelector("a");
               if (sourceLink) info.source = sourceLink.href;
             }
-            
-            // 针对其他表格元数据的解析
-            if (innerText.includes('Category')) {
-              info.category = innerText.replace('Category', '').replace(/\n/g, ' ').trim();
-            }
-            if (innerText.includes('Color')) {
-              info.color = innerText.replace('Color', '').replace(/\n/g, ' ').trim();
-            }
-            if (innerText.includes('Interaction')) {
-              info.interaction = innerText.replace('Interaction', '').replace(/\n/g, ' ').trim();
-            }
-            // Style 往往有多个标签，我们用数组存
-            if (innerText.includes('Style')) {
-              const styleText = innerText.replace('Style', '').trim();
-              info.style = styleText.split('\n').map(s => s.trim()).filter(Boolean);
+            if (innerText.includes("Category"))
+              info.category = innerText
+                .replace("Category", "")
+                .replace(/\n/g, " ")
+                .trim();
+            if (innerText.includes("Color"))
+              info.color = innerText
+                .replace("Color", "")
+                .replace(/\n/g, " ")
+                .trim();
+            if (innerText.includes("Interaction"))
+              info.interaction = innerText
+                .replace("Interaction", "")
+                .replace(/\n/g, " ")
+                .trim();
+            if (innerText.includes("Style")) {
+              const styleText = innerText.replace("Style", "").trim();
+              info.style = styleText
+                .split("\n")
+                .map((s) => s.trim())
+                .filter(Boolean);
             }
           });
 
-          // 4. 提取视频直链
-          const videoEl = document.querySelector('video source') || document.querySelector('video');
-          const videoUrl = videoEl ? videoEl.src : '';
+          const videoEl =
+            document.querySelector("video source") ||
+            document.querySelector("video");
+          const videoUrl = videoEl ? videoEl.src : "";
 
           return { title, description, videoUrl, ...info };
         });
@@ -140,33 +178,38 @@ async function run() {
           continue;
         }
 
-        // 5. 按索引 index 分组创建专属文件夹保存
         const itemDir = path.join(outputBaseDir, `item_${index}`);
         if (!fs.existsSync(itemDir)) fs.mkdirSync(itemDir);
 
-        // 存储当前条目的元数据
         fs.writeFileSync(
-          path.join(itemDir, 'meta.json'), 
-          JSON.stringify(metaData, null, 2), 
-          'utf-8'
+          path.join(itemDir, "meta.json"),
+          JSON.stringify(metaData, null, 2),
+          "utf-8",
         );
-
-        // 下载当前文件夹对应的视频
-        await downloadVideo(metaData.videoUrl, path.join(itemDir, 'raw_video.mp4'));
-
+        await downloadVideo(
+          metaData.videoUrl,
+          path.join(itemDir, "raw_video.mp4"),
+        );
       } catch (itemError) {
-        console.error(`❌ 抓取单条数据失败 [索引 ${index}]:`, itemError.message);
+        console.error(
+          `❌ 抓取单条数据失败 [索引 ${index}]:`,
+          itemError.message,
+        );
+      } finally {
+        // 💡 关键改动：无论成功还是失败，抓完一定要关闭这个标签页，释放内存
+        await detailPage.close();
+        // 稍微休眠 1.5 秒，避免请求频率过高被封 IP
+        await page.waitForTimeout(1500);
       }
     }
 
-    console.log('\n==================================================');
+    console.log("\n==================================================");
     console.log(`🏁 批量抓取任务结束！所有数据已分类存放至 output/ 文件夹下。`);
-
   } catch (error) {
-    console.error('❌ 脚本运行期间发生严重错误:', error);
+    console.error("❌ 脚本运行期间发生严重错误:", error);
   } finally {
     await browser.close();
-    console.log('🤖 自动化浏览器已关闭。');
+    console.log("🤖 自动化浏览器已关闭。");
   }
 }
 
