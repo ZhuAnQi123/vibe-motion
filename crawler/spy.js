@@ -3,12 +3,10 @@ import fs from "fs";
 import path from "path";
 import { pipeline } from "stream/promises";
 import { Readable } from "stream";
-import "dotenv/config"; // 引入环境变量
+import "dotenv/config";
 
-// 核心账本路径
 const HISTORY_FILE_PATH = path.join(process.cwd(), "processed_urls.json");
 
-// 读取已处理过的账本链接
 function getProcessedUrls() {
   if (fs.existsSync(HISTORY_FILE_PATH)) {
     try {
@@ -42,32 +40,51 @@ async function run() {
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
   });
   const page = await context.newPage();
-  const TARGET_WEBSITE = process.env.TARGET_WEBSITE 
+  const TARGET_WEBSITE = process.env.TARGET_WEBSITE || "https://recent.design/";
 
   try {
     console.log(`🌐 正在打开 website: ${TARGET_WEBSITE}`);
     await page.goto(TARGET_WEBSITE, { waitUntil: "networkidle" });
+    await page.waitForTimeout(2000);
 
-    // 1. 切换到 Motion 视图
+    // 1. 全自动退散订阅弹窗
+    console.log("🔍 正在检测是否存在订阅弹窗干扰...");
+    const isModalVisible = await page.evaluate(() => {
+      return (
+        document.body.innerText.includes("Stay ahead of trends") ||
+        document.body.innerText.includes("Subscribe")
+      );
+    });
+
+    if (isModalVisible) {
+      console.log("🚨 侦测到订阅弹窗挡路！正在执行空白处无痕点击以关闭弹窗...");
+      await page.mouse.click(100, 100);
+      await page.waitForTimeout(1000);
+      console.log("👍 弹窗已成功驱散。");
+    } else {
+      console.log("✅ 本次未触发弹窗。");
+    }
+
+    // 2. 切换到 Motion 视图
     console.log('🎯 正在寻找并点击 "Motion" 筛选标签...');
     const motionButton = page
       .locator(
-        'button:has-text("Motion"), a:has-text("Motion"), div:has-text("Motion")',
+        'button:has-text("Motion"), a:has-text("Motion"), [class*="tag"]:has-text("Motion")',
       )
       .first();
     await motionButton.waitFor({ state: "visible", timeout: 5000 });
-    await motionButton.click();
+    await motionButton.click({ force: true });
     console.log("✨ 已成功切换到 Motion 筛选视图，等待列表加载...");
     await page.waitForTimeout(3000);
 
-    // 2. 模拟向下滚动（增加滚动次数到 6 次，确保刷出至少 20-30 个卡片）
+    // 3. 模拟向下滚动
     console.log("📜 正在向下滚动页面以加载更多动态内容...");
     for (let i = 0; i < 6; i++) {
       await page.evaluate(() => window.scrollBy(0, window.innerHeight * 2));
       await page.waitForTimeout(1200);
     }
 
-    // 3. 收集当前页面上所有属于 Motion 的卡片链接
+    // 4. 收集当前页面上所有属于 Motion 的卡片链接
     const cardSelectors = await page.evaluate(() => {
       const links = Array.from(
         document.querySelectorAll('main a, .grid a, [class*="card"] a'),
@@ -79,18 +96,19 @@ async function run() {
         );
     });
 
-    // 去重
     const uniqueCardUrls = [...new Set(cardSelectors)];
     console.log(
       `📚 页面总共刷出 ${uniqueCardUrls.length} 个 Motion 条目链接。`,
     );
 
-    // 🌟 【核心去重硬核逻辑】与历史账本进行比对过滤
+    // 🌟 【修复核心】现在完全基于 cardUrl 页面链接进行去重比对
     const processedUrls = getProcessedUrls();
     const newCardUrls = uniqueCardUrls.filter(
       (url) => !processedUrls.includes(url),
     );
-    console.log(`🔍 账本过滤后：发现 ${newCardUrls.length} 个未爬取的新品。`);
+    console.log(
+      `🔍 账本过滤后：发现 ${newCardUrls.length} 个真正未爬取的新品。`,
+    );
 
     if (newCardUrls.length === 0) {
       console.log(
@@ -99,18 +117,16 @@ async function run() {
       return;
     }
 
-    // 🌟 【效率提升】限制单次抓取数量提升到 20 个
     const maxItemsToFetch = Math.min(newCardUrls.length, 20);
     console.log(`🚀 本次将自动流水线式抓取前 ${maxItemsToFetch} 个新品...`);
 
     const outputBaseDir = path.join(process.cwd(), "output");
-    // 如果存在老 output 文件夹，先清空它，确保本次生产线文件夹不混淆
     if (fs.existsSync(outputBaseDir)) {
       fs.rmSync(outputBaseDir, { recursive: true, force: true });
     }
     fs.mkdirSync(outputBaseDir);
 
-    // 4. 循环遍历每一个动效详情页
+    // 5. 循环遍历每一个动效详情页
     for (let index = 0; index < maxItemsToFetch; index++) {
       const cardUrl = newCardUrls[index];
       console.log(`\n--------------------------------------------------`);
@@ -123,7 +139,6 @@ async function run() {
         await page.waitForSelector("video", { timeout: 10000 });
         await page.waitForTimeout(1000);
 
-        // 精准数据提取
         const metaData = await page.evaluate(() => {
           const titleEl = document.querySelector('h1, [class*="title"]');
           const title = titleEl ? titleEl.innerText.trim() : "Unknown Title";
@@ -195,9 +210,8 @@ async function run() {
           return { title, description, videoUrl, ...info };
         });
 
-        // 🌟 将卡片原始的详情链接(cardUrl)写入到 meta.json 中，方便后续 analyzer 追踪
+        // 绑定卡片 URL
         metaData.cardUrl = cardUrl;
-
         console.log(`🎉 成功抓取 [Item ${index}]:`, metaData);
 
         if (!metaData.videoUrl) {
@@ -208,14 +222,12 @@ async function run() {
         const itemDir = path.join(outputBaseDir, `item_${index}`);
         if (!fs.existsSync(itemDir)) fs.mkdirSync(itemDir);
 
-        // 存储当前条目的元数据
         fs.writeFileSync(
           path.join(itemDir, "meta.json"),
           JSON.stringify(metaData, null, 2),
           "utf-8",
         );
 
-        // 下载视频
         await downloadVideo(
           metaData.videoUrl,
           path.join(itemDir, "raw_video.mp4"),
@@ -230,9 +242,6 @@ async function run() {
 
     console.log("\n==================================================");
     console.log(`🏁 批量抓取任务结束！所有全新数据已存放至 output/ 文件夹下。`);
-    console.log(
-      `💡 下一步：请开启代理的 TUN 模式，并运行 node analyzer.js 进行 AI 解析！`,
-    );
   } catch (error) {
     console.error("❌ 脚本运行期间发生严重错误:", error);
   } finally {
