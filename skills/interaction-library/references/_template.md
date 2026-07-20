@@ -11,6 +11,18 @@ description: >
 触发词：[填入触发词，如 流体展开、阻尼回弹、iOS 风卡片]
 website: "Original design URL (Optional)"
 
+# Phase 3 扩展：素材盾与依赖项防御声明
+assets:
+  required: true
+  items:
+    - name: "核心 SVG 路径"
+      type: "SVG"
+      description: "用于形变融合的纯净 SVG path (如需)"
+      template_url: ""
+  dependencies:
+    - "framer-motion@^11.0.0"
+    - "lucide-react"
+
 # ==========================================
 
 # VISION-AGENT GUIDE: 动效物理预设词典 (仅供 Vision-Agent 分析时选择套用)
@@ -53,6 +65,20 @@ exit: { opacity: 0, scale: 0.95, y: -10, filter: "blur(2px)" }
 ---
 
 # [动效名称] Specification & Implementation Protocol
+
+## 0. 准备工作 (Prerequisite Check - MUST READ)
+
+> **⚠️ 核心指令（针对 AI Assistant）：**
+> 在阅读下方具体的动效规范前，你必须首先检查用户当前的项目上下文中是否已准备好以下前置条件：
+> - [ ] **依赖项检查**：项目中是否安装了 `framer-motion`。
+> - [ ] **素材检查**：此动效可能需要特定的 SVG 或切图结构。
+> 
+> **If (用户未提供或环境未满足)** {
+>    停止生成具体的 React/CSS 动效代码;
+>    直接向用户发出友好询问：“为了完美实现此动效，我需要您先提供 [具体素材描述] 并确认已安装 [依赖包]...”
+> } **Else** {
+>    继续按照下方的动效规范，完美还原物理插值曲线。
+> }
 
 ## 1. Interaction & Feel Vibe (动效体感)
 
