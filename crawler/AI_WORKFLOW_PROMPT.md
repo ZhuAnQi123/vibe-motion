@@ -91,43 +91,50 @@ motion_tokens:
 - **[0ms - 350ms] Trigger Phase**: 描述核心属性变化（`scale`, `opacity`, `translate`）。
 - **[Exit Phase] Reverse Sequence**: 描述复位与退场时序。
 
-## 4. Implementation Directives (代码编写规范)
+## 4. Finite State Machine (FSM) & Technical Directives
 
-必须输出 React + Tailwind CSS + Framer Motion 实现的完整单体组件代码。
+> **⚠️ [CRITICAL RULE FOR VISION AGENT]**
+> 绝对禁止输出任何具体的 React/Vue/CSS 纯代码块！
+> 你的职责是作为“系统分析师”，将视频拆解为供 Code Agent 执行的**有限状态机 (FSM)** 与 **技术实现指导算法**。
 
-```tsx
-import React from "react";
-import { motion } from "framer-motion";
+### 4.1 State Machine & Asset Transition Matrix (状态转换与资产矩阵)
 
-const physicsConfig = {
-  type: "spring",
-  stiffness: 200,
-  damping: 25,
-};
+必须梳理出交互过程中**所有涉及元素**在不同状态下的视觉姿态、资产形态及物理响应：
 
-interface MotionComponentProps {
-  label?: string;
-  className?: string;
-}
+| 触发阶段 (State) | 触发条件 (Event/Trigger) | 主体元素姿态/形态 (Primary Asset) | 关联目标姿态 (Target Element) | 关键物理参数与动画细节 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Idle** | 初始加载 / 重置完成 | 默认形态 (例: 📄 文件图标), Scale: 1, Static | 默认形态 (例: 🗑️ 静态垃圾桶) | 无 |
+| **Active Drag** | `onDragStart` / 按住拖拽 | 悬浮形态, 伴随位移跟手, Shadow 放大, 旋转跟随位移 | 静态 / 或呈现 Hover 高亮状态 | `scale: 1.05`, 动态跟手倾斜 `rotate: f(vx)` |
+| **Release: Hit** | 松手且命中碰撞区域 | **[资产突变/销毁]** 快速向目标中心缩放/旋转/透明度归零 | **[关联触发]** 垃圾桶执行“吞咽/抖动”二次动画 | 极快缩放 `scale: 0`, `rotate: 360deg`, 触发 Success Toast |
+| **Release: Miss**| 松手且未命中碰撞区域 | **[形态切换]** 突变为球体/纸团形态 (📄 -> ⚪️) | 保持 Idle 或触发 Miss 计数器增加 | 提取 `info.velocity` 动量，执行碰撞落地/反弹归位动画 |
 
-export const MotionComponent: React.FC<MotionComponentProps> = ({
-  label = "Interactive Item",
-  className = "",
-}) => {
-  return (
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      transition={physicsConfig}
-      className={`px-6 py-3 bg-white text-black rounded-xl font-medium shadow-lg ${className}`}
-    >
-      {label}
-    </motion.button>
-  );
-};
+---
 
-```
+### 4.2 Implementation Logic Blueprint (技术实现逻辑蓝图)
 
+请为 Code Agent 编写逻辑清晰的**技术实现指导（Pseudo-Logic）**，明确说明需要使用的框架 API 与状态控制手段：
+
+#### 1. 状态管理依赖 (State Requirements)
+- **核心状态变量**：需定义哪些本地状态？（例如：`isDragging`, `isCrumpled` [形态是否突变], `isHit`, `missCount`）
+- **物理量采集**：需要监听哪些实时物理量？（例如：Framer Motion 的 `useMotionValue` 结合 `useTransform` 映射旋转角，`onDragEnd` 的 `info.velocity` 动量控制）
+
+#### 2. 碰撞与判定算法 (Collision & Hit Detection)
+- 描述精确的碰撞检测逻辑（例如：基于 DOM 包围盒 `getBoundingClientRect()` 的 Overlap 计算，或距离圆心的 Radius 计算）。
+
+#### 3. 多元素时序编排 (Orchestration & Choreography)
+- **关联动画触发机制**：当主体元素（如文件）处于某个状态时，目标元素（如垃圾桶）如何配合动作？（例如：使用 Framer Motion 的 `useAnimation` 模块，在 `Hit` 事件触发后通过 `await controls.start({ scale: [1, 1.2, 1] })` 播放垃圾桶吞咽动画）。
+- **形态突变与资产切换**：说明在什么条件下进行条件渲染（Conditional Rendering）或 SVG Path 变形（Morphing）。
+
+---
+
+## 🛑 Code Agent Execution Directives (下游代码大模型硬性执行规范)
+
+> **⚠️ [SYSTEM DIRECTIVE FOR CODE AGENT]** 
+> 当你读取本 MD 文件编写代码时，必须严格遵守以下工程规范：
+
+1. **拒绝假动画 (No Fake Scale Down)**：如果状态矩阵指出了 `Asset Transition`（如文件变成纸团），必须通过条件渲染（如 `isCrumpled ? <CrumpledIcon /> : <FileIcon />`）或路径变形实现，严禁仅用简单的 `scale: 0` 糊弄。
+2. **物理动量还原 (Velocity Awareness)**：如果交互涉及“抛掷 (Toss)”或“反弹 (Bounce)”，必须在 `onDragEnd` 中读取拖拽的末速度 `info.velocity`，并传递给 `dragTransition` 或计算反弹轨迹曲线。
+3. **状态解耦与多元素联动**：严禁把所有动画写在一个 `motion.div` 内。必须将关联组件（如目标桶、提示 Toast、主拖拽物）分离，并通过状态共享或 Animation Controls 编排复杂的二次反馈（Secondary Animation）。
 ## 🛑 AI Anti-Patterns & Blocklist (AI 硬性禁忌)
 
 > **⚠️ [SYSTEM RULE]** Code-Agent 必须严禁以下反模式：

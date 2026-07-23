@@ -6,9 +6,17 @@ import { setGlobalDispatcher, ProxyAgent } from "undici";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import ffmpeg from "fluent-ffmpeg";
 
+// 🌐 代理配置
 if (process.env.HTTP_PROXY || process.env.HTTPS_PROXY) {
   const proxyUrl = process.env.HTTP_PROXY || process.env.HTTPS_PROXY;
-  setGlobalDispatcher(new ProxyAgent({ uri: proxyUrl }));
+  setGlobalDispatcher(
+    new ProxyAgent({
+      uri: proxyUrl,
+      connect: {
+        timeout: 60000, // 提升超时时间至 60 秒
+      },
+    })
+  );
 }
 
 const ai = new GoogleGenAI({});
@@ -73,10 +81,11 @@ async function uploadVideoToR2(localFilePath, fileNameOnR2) {
   }
 }
 
+// 📦 将本地视频转换为 Base64 内联数据，避免 stream 上传触发 Header 校验问题
 function fileToGenerativePart(filePath, mimeType) {
   return {
     inlineData: {
-      data: Buffer.from(fs.readFileSync(filePath)).toString("base64"),
+      data: fs.readFileSync(filePath).toString("base64"),
       mimeType,
     },
   };
@@ -148,7 +157,7 @@ async function analyzeItem(itemFolderName) {
   const stats = fs.statSync(videoPath);
   const fileSizeInMegabytes = stats.size / (1024 * 1024);
 
-  // 🛡️ 防线 2：通过文件大小二次剔除（大型 3D/CG 渲染片段体积往往较大）
+  // 🛡️ 防线 2：通过文件大小二次剔除
   if (fileSizeInMegabytes > 15.0) {
     console.log(`⚠️ [跳过] 视频体积达 ${fileSizeInMegabytes.toFixed(2)}MB，判定为超复杂场景/非 UI 动画。`);
     if (targetUrl) saveToHistory(targetUrl);
@@ -171,6 +180,8 @@ async function analyzeItem(itemFolderName) {
 
   console.log(`\n🤖 [Gemini] 开始分析 [${itemFolderName}]: ${metaData.title}...`);
   const workflowPrompt = fs.readFileSync(PROMPT_FILE_PATH, "utf-8");
+
+  // 转换视频为 Base64 对象
   const videoPart = fileToGenerativePart(finalProcessedVideoPath, "video/mp4");
 
   const userInstructions = `
@@ -217,10 +228,10 @@ ${workflowPrompt}
       return;
     }
 
-    // 🎯 零正则表达式直接获取关键字段
+    // 🎯 获取关键字段
     const fileName = result.name ? result.name.trim() : null;
     if (!fileName) {
-      throw new Error("Gemini 返回的 JSON 中 lacked 有效的 name 字段。");
+      throw new Error("Gemini 返回的 JSON 中缺乏有效的 name 字段。");
     }
 
     console.log(`🎯 Gemini 成功分析！组件命名 (name): ${fileName}`);
@@ -239,7 +250,7 @@ ${workflowPrompt}
 
     if (targetUrl) saveToHistory(targetUrl);
   } catch (error) {
-    console.error(`❌ Gemini 分析或 R2 上传 [${itemFolderName}] 失败:`, error.message);
+    console.error(`❌ Gemini 分析或 R2 上传 [${itemFolderName}] 失败:`, error.message || error);
   }
 }
 
