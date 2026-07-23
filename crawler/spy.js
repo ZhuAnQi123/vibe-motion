@@ -44,7 +44,8 @@ async function run() {
 
   try {
     console.log(`🌐 正在打开 website: ${TARGET_WEBSITE}`);
-    await page.goto(TARGET_WEBSITE, { waitUntil: "networkidle" });
+    // await page.goto(TARGET_WEBSITE, { waitUntil: "networkidle" });
+    await page.goto(TARGET_WEBSITE, { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.waitForTimeout(2000);
 
     // 1. 全自动退散订阅弹窗
