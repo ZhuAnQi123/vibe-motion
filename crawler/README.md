@@ -14,15 +14,17 @@ vibe-motion/
 │   └── interaction-library/
 │       └── references/          # 🎯 AI 脚本解析出的 .md 规范最终落盘于此
 └── crawler/                     # 🚀 爬虫与 AI 全家桶核心目录
+    ├── .aidev/                  # 📓 AI 辅助开发工作区 (包含指南、日志、规划)
+    │   ├── AIDEV_GUIDE.md       # 📖 AI 辅助开发团队协作与使用指南
+    │   └── plans/auto_test.md   # 🚥 自动化测试与自迭代架构的演进路线图
     ├── .env                     # 🔒 本地私密环境变量（API Key、R2 凭证、路径等）
     ├── .gitignore               # 🚫 Git 忽略配置文件（防止凭证泄露）
     ├── package.json             # 📦 项目依赖与运行脚本
     ├── AI_WORKFLOW_PROMPT.md    # 📝 塞给 Gemini 的核心动效分析 Prompt 模板
-    ├── processed_urls.json      # 📓 增量更新历史账本（以详情页 cardUrl 为准，防止重复抓取）
+    ├── processed_urls.json      # 💾 增量更新历史账本（以详情页 cardUrl 为准，防止重复抓取）
     ├── spy.js                   # 🕷️ 阶段一：Playwright 自动化列表与详情页爬虫（含智能防弹窗干扰机制）
     ├── analyzer.js              # 🤖 阶段二：FFmpeg 预处理、Gemini 多模态解析与 R2 上传器
     ├── validator.js             # 🧪 阶段三：基于生成的 Markdown 规范，自动化代码实现与效果验证
-    ├── auto_test.md             # 🚥 自动化测试与自迭代架构的演进路线图
     └── output/                  # 📁 临时媒体缓存（执行完一轮后建议手动或脚本自动清空）
 
 ```
