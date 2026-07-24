@@ -21,6 +21,8 @@ vibe-motion/
     ├── processed_urls.json      # 📓 增量更新历史账本（以详情页 cardUrl 为准，防止重复抓取）
     ├── spy.js                   # 🕷️ 阶段一：Playwright 自动化列表与详情页爬虫（含智能防弹窗干扰机制）
     ├── analyzer.js              # 🤖 阶段二：FFmpeg 预处理、Gemini 多模态解析与 R2 上传器
+    ├── validator.js             # 🧪 阶段三：基于生成的 Markdown 规范，自动化代码实现与效果验证
+    ├── auto_test.md             # 🚥 自动化测试与自迭代架构的演进路线图
     └── output/                  # 📁 临时媒体缓存（执行完一轮后建议手动或脚本自动清空）
 
 ```
