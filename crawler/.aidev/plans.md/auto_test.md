@@ -38,10 +38,21 @@
 - [x] **自动化交互与录制**: 使用 Playwright 的 `page.video()` 和 `mouse` API，模拟居中悬停、点击、移开等通用交互，录制出 `generated_video.mp4`。
 - *人工介入点*：此时流程暂停，由开发者手动对比 `raw_video.mp4` 和 `generated_video.mp4`，验证代码生成代理的可靠性。
 
-### 🟡 Step 2: 全自动化验证 (AI 裁判引入)
-- [ ] **多模态 AI 裁判**: 将原始视频、生成视频、规范 `.md` 三者打包，调用 Gemini 1.5 Pro 视觉模型。
-- [ ] **裁判 Prompt 设计**: 设计专门用于对比物理体感、时序、缓动曲线的系统指令。
-- [ ] **决策逻辑**: 根据 AI 输出的 `similarity_score`，决定是放行（上传 R2 并标记通过）还是拦截（输出错误日志）。
+###  Step 2: 全自动化验证 (AI 裁判引入) - [已完成]
+- [x] **多模态 AI 裁判**: 将原始视频、生成视频、规范 `.md` 三者打包，调用最新的 Gemini 2.5 Pro 视觉模型。
+- [x] **裁判 Prompt 设计**: 设计专门用于对比物理体感、时序、缓动曲线的系统指令，强制输出结构化 `dimensions_analysis`。
+- [x] **决策逻辑**: 在 Node.js 侧硬编码分数阈值 (>= 80 为通过)，并将 `discrepancies` 连同判断结果统一落盘至 `validation_report.json` 供后续消费。
+
+> **📝 附注：Step 2 默认文件目录结构约定**
+> `validator.js` 执行强依赖以下 `validation_output` 的文件输入输出结构：
+> ```text
+> validation_output/
+>  └── <component-name>/
+>       ├── raw_video.mp4          (需要从 output/ 拷贝过来的参考源)
+>       ├── generated.webm         (Playwright 无头录屏产物)
+>       ├── spec.md                (动效技术规范)
+>       └── validation_report.json (裁判跑完后落盘生成的打分与差异报告)
+> ```
 
 ### 🔴 Step 3: 自迭代闭环系统 (Self-Healing)
 - [ ] **错误反馈解析**: 提取 AI 裁判输出的 `discrepancies` (不一致点)。
