@@ -71,9 +71,18 @@
 > ```
 > `validator.js` 的 Step 2 通过 `validation_output/<component-name>_generated.webm` 反推组件名，再分别从 `TARGET_SKILLS_DIR/<component-name>.md` 与 `output/` 下匹配 `resolved_name.txt` 的 `raw_video.mp4` 取齐三元组。
 
-### 🔴 Step 3: 自迭代闭环系统 (Self-Healing)
-- [ ] **错误反馈解析**: 提取 AI 裁判输出的 `discrepancies` (不一致点)。
-- [ ] **Prompt 修正与重试**: 将反馈信息自动转化为修正指令，重新调用 `analyzer.js` 重新生成 v2 版本的 `.md`，再次进入 Step 1 验证，实现机器自我纠错。
+###  Step 3: 自迭代闭环系统 (Self-Healing) - [已完成]
+- [x] **错误反馈解析**: 新建 `validator_step3.js`，读取 Step 2 产出的 `validation_report.json`，提取 `discrepancies`。
+- [x] **Prompt 修正与重试**: 将缺陷报告 `discrepancies` 连同旧的 `.md` 规范一起发给 AI，要求其进行针对性修正。
+- [x] **自愈闭环**: AI 生成修正后的 `.md` 规范后，自动备份旧规范并覆盖写入原文件，以便开发者重新运行 `validator_step1.js` 和 `validator.js` 进行二次验证。
+
+> **联调测试指南 (Step 3)**:
+> 1. 确保 Step 2 已对某个组件（如 `bento-button-stagger-hover`）输出了未通过的 `_validation_report.json`。
+> 2. 运行 `node validator_step3.js bento-button-stagger-hover`。
+> 3. 检查 `TARGET_SKILLS_DIR` 目录，确认 `bento-button-stagger-hover.md` 已被更新，并且生成了 `bento-button-stagger-hover.md.bak` 备份。
+> 4. （可选）对比新旧 `.md` 文件，确认 AI 的修改是否针对性地解决了 `discrepancies` 中指出的问题。
+> 5. 重新运行 Step 1 和 Step 2：`node validator_step1.js bento-button-stagger-hover` 和 `node validator.js`。
+> 6. 理想情况下，新一轮的 `validation_report.json` 分数会提高，甚至达到 `passed: true`。
 
 ### 🟡 Step 4: 正确的端到端串联逻辑（待实现 / 规划）
 当前 Step 1 / Step 2 仅是联调用的“半自动”：Step 1 拿 references 第一个 md 测试、Step 2 临时回退参考视频。上线前应改为以下正确逻辑：
