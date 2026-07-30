@@ -24,7 +24,8 @@ vibe-motion/
     ├── processed_urls.json      # 💾 增量更新历史账本（以详情页 cardUrl 为准，防止重复抓取）
     ├── spy.js                   # 🕷️ 阶段一：Playwright 自动化列表与详情页爬虫（含智能防弹窗干扰机制）
     ├── analyzer.js              # 🤖 阶段二：FFmpeg 预处理、Gemini 多模态解析与 R2 上传器
-    ├── validator.js             # 🧪 阶段三：基于生成的 Markdown 规范，自动化代码实现与效果验证
+    ├── validator_step1.js        # 🧪 阶段三·Step1：读 .md 规范 → AI 生成单文件 HTML → Playwright 无头录制
+    ├── validator.js             # 🧪 阶段三·Step2：多模态 AI 裁判，对比 原始视频/生成视频/规范 并打分
     └── output/                  # 📁 临时媒体缓存（执行完一轮后建议手动或脚本自动清空）
 
 ```
@@ -73,7 +74,7 @@ GEMINI_API_KEY="AIzaSyYourActualGeminiApiKeyHere..."
 TARGET_WEBSITE="[https://recent.design/](https://recent.design/)"
 
 # 最终生成的 Markdown 规范落盘绝对路径
-TARGET_SKILLS_DIR="/Users/v.sophie.zhu/Documents/code/vibe-ui/vibe-motion/skills/interaction-library/references"
+TARGET_SKILLS_DIR="/Users/mac/Documents/code/vibe-motion/skills/interaction-library/references"
 
 # Cloudflare R2 云存储配置
 CLOUDFLARE_ACCOUNT_ID="你的32位账户ID"
@@ -113,6 +114,31 @@ node analyzer.js
 - **格式安全锁（需求 2）**：若抓取到的非 `.mp4` 格式（如 `.mov`, `.webm`），全自动调用 FFmpeg 将其标准化转换为标准封装的 `.mp4`。
 - **体积压榨机（需求 1）**：若视频体积**超过 2MB**，FFmpeg 将自动启用 H.264 (CRF 28) 进行智能极限压缩，确保加载速度体验。
 - **大模型解析 & 云同步**：最终经优化后的高质视频会被转化为 Base64 送入 Gemini 1.5 Pro 进行动效体验拆解，并以大模型最终生成的英文规范名 `name` 为准，自动上传视频到 Cloudflare R2 并将 Markdown 说明书落盘到 `vibe-motion` 项目中。
+
+### 阶段三：自动化验证与 AI 裁判（Step 1 + Step 2）
+
+基于 `analyzer.js` 产出的 `.md` 规范，对动效做"机器自己实现 + 自己验收"：
+
+```bash
+# Step 1：读规范 → AI 生成单文件 HTML → Playwright 无头录制
+#   <component> 对应 TARGET_SKILLS_DIR 下某个 <component>.md
+node validator_step1.js <component>
+#   产物落在 crawler/validation_output/：
+#     <component>_test.html             生成的单文件测试页
+#     <component>_generated.webm        无头录制视频（Step 2 裁判对象）
+#     <component>_debug_screenshot.png  渲染校验截图
+
+# Step 2：多模态 AI 裁判，对比 原始视频 / 生成视频 / 规范 并打分
+node validator.js
+#   扫描 validation_output/*_generated.webm，对每个组件取三元组：
+#     1) <component>_generated.webm          (Step 1 产物)
+#     2) <TARGET_SKILLS_DIR>/<component>.md  (analyzer.js 规范)
+#     3) output/item_*/raw_video.mp4         (经该 item 的 resolved_name.txt 反查组件名匹配)
+#   三样缺任一则跳过；齐全则调 Gemini 裁判，报告落盘 <component>_validation_report.json
+```
+
+- **渲染校验**：`validator_step1.js` 在录制前会检查页面是否真正画出元素（`#root` 子节点数等），空白页面会直接报错退出，避免"流程跑通但视频空白"。
+- **前置依赖**：`.env` 配好 `GEMINI_API_KEY`（Step 1 生成与 Step 2 裁判都需要联网调用 Gemini）；首次运行确保 `npx playwright install chromium` 已执行。
 
 ---
 

@@ -27,7 +27,7 @@ const PROMPT_FILE_PATH = path.join(CURRENT_DIR, "AI_WORKFLOW_PROMPT.md");
 const HISTORY_FILE_PATH = path.join(CURRENT_DIR, "processed_urls.json");
 const TARGET_SKILLS_DIR =
   process.env.TARGET_SKILLS_DIR ||
-  "/Users/v.sophie.zhu/Documents/code/vibe-ui/vibe-motion/skills/interaction-library/references";
+  "/Users/mac/Documents/code/vibe-motion/skills/interaction-library/references";
 
 const r2Client = new S3Client({
   region: "auto",

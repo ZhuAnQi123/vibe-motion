@@ -18,6 +18,10 @@ if (process.env.HTTP_PROXY || process.env.HTTPS_PROXY) {
 const ai = new GoogleGenAI({});
 const CURRENT_DIR = process.cwd();
 const VALIDATION_DIR = path.join(CURRENT_DIR, "validation_output");
+const OUTPUT_DIR = path.join(CURRENT_DIR, "output");
+const TARGET_SKILLS_DIR =
+  process.env.TARGET_SKILLS_DIR ||
+  "/Users/mac/Documents/code/vibe-motion/skills/interaction-library/references";
 
 // 定义及格分数线
 const PASSING_SCORE_THRESHOLD = 80;
@@ -33,6 +37,21 @@ function fileToGenerativePart(filePath, mimeType) {
 }
 
 // 🎯 Step 2.1: 定义裁判结果的数据结构 (Structured Output Schema)
+// ⚠️ TEMPORARY: 临时回退路径（仅用于跑通闭环测试，后续必须删除）
+// 当 output/ 下没有通过 resolved_name.txt 匹配到的 raw_video.mp4 时，
+// 回退到 validation_output/<component>.mp4 或 .mov 作为参考源。
+// 这些临时参考文件（如 bento-button-stagger-hover.mp4）不是固定产物，
+// 待 auto_test.md「Step 4 正确逻辑」落地（references 新增文件 → Step1 → 与 output/ 视频按名映射比较）后，
+// 应移除本回退逻辑并删掉这些临时文件。
+function findTempReferenceFallback(componentName) {
+  for (const ext of ["mp4", "mov"]) {
+    const p = path.join(VALIDATION_DIR, `${componentName}.${ext}`);
+    if (fs.existsSync(p)) return p;
+  }
+  return null;
+}
+
+
 // 取消了 passed 字段，让模型专心打分和输出评价，判断逻辑交由 Node.js 控制
 const validationSchema = {
   type: Type.OBJECT,
@@ -69,25 +88,57 @@ const validationSchema = {
 };
 
 // 🎯 Step 2.2 & 2.3: 核心判断逻辑与 Prompt 设计
-async function validateComponent(folderName) {
-  const targetDir = path.join(VALIDATION_DIR, folderName);
-  
-  // ⚠️ 这里的具体文件名请根据你 Step 1 的实际产出进行微调
-  const rawVideoPath = path.join(targetDir, "raw_video.mp4");
-  const generatedVideoPath = path.join(targetDir, "generated.webm"); 
-  const mdSpecPath = path.join(targetDir, "spec.md");
+// 通过 output/ 下各 item_<n>/resolved_name.txt 反查组件名对应的原始参考视频
+function findRawVideoForComponent(componentName) {
+  if (!fs.existsSync(OUTPUT_DIR)) return null;
+  const items = fs
+    .readdirSync(OUTPUT_DIR)
+    .filter((f) => f.startsWith("item_") && fs.statSync(path.join(OUTPUT_DIR, f)).isDirectory());
 
-  if (!fs.existsSync(rawVideoPath) || !fs.existsSync(generatedVideoPath) || !fs.existsSync(mdSpecPath)) {
-    console.log(`⚠️ [跳过] ${folderName} 缺乏必要的三元组文件 (raw_video, generated.webm, spec.md)。`);
+  for (const item of items) {
+    const resolvedPath = path.join(OUTPUT_DIR, item, "resolved_name.txt");
+    if (fs.existsSync(resolvedPath)) {
+      const name = fs.readFileSync(resolvedPath, "utf-8").trim();
+      if (name === componentName) {
+        const rawPath = path.join(OUTPUT_DIR, item, "raw_video.mp4");
+        return fs.existsSync(rawPath) ? rawPath : null;
+      }
+    }
+  }
+  // ⚠️ TEMPORARY: 兜底到 validation_output 下的临时参考（闭环测试用，见 findTempReferenceFallback 注释）
+  return findTempReferenceFallback(componentName);
+}
+
+async function validateComponent(componentName) {
+  // 扁平、按组件名命名的真实分布：
+  //   - 生成视频: validation_output/<component>_generated.webm    (Step 1 产物)
+  //   - 规范文件: TARGET_SKILLS_DIR/<component>.md               (analyzer.js 产物)
+  //   - 原始视频: output/item_*/raw_video.mp4                    (spy.js 产物，经 resolved_name.txt 关联)
+  const generatedVideoPath = path.join(VALIDATION_DIR, `${componentName}_generated.webm`);
+  const mdSpecPath = path.join(TARGET_SKILLS_DIR, `${componentName}.md`);
+  const rawVideoPath = findRawVideoForComponent(componentName);
+
+  if (!fs.existsSync(generatedVideoPath)) {
+    console.log(`⚠️ [跳过] ${componentName} 缺少生成视频 ${componentName}_generated.webm。`);
+    return;
+  }
+  if (!fs.existsSync(mdSpecPath)) {
+    console.log(`⚠️ [跳过] ${componentName} 缺少规范文件 ${componentName}.md (TARGET_SKILLS_DIR)。`);
+    return;
+  }
+  if (!rawVideoPath) {
+    console.log(`⚠️ [跳过] ${componentName} 在 output/ 中找不到对应的 raw_video.mp4 (resolved_name.txt 未匹配)。`);
     return;
   }
 
-  console.log(`\n⚖️  [AI 裁判] 开始评估组件: ${folderName}...`);
+  console.log(`\n⚖️  [AI 裁判] 开始评估组件: ${componentName}...`);
   
   const mdContent = fs.readFileSync(mdSpecPath, "utf-8");
 
-  // 构建多模态输入
-  const rawVideoPart = fileToGenerativePart(rawVideoPath, "video/mp4");
+  // 构建多模态输入（按扩展名选择原始参考视频的 MIME，兼容临时 .mov 回退）
+  const rawExt = path.extname(rawVideoPath).toLowerCase();
+  const rawMime = rawExt === ".mov" ? "video/quicktime" : "video/mp4";
+  const rawVideoPart = fileToGenerativePart(rawVideoPath, rawMime);
   const generatedVideoPart = fileToGenerativePart(generatedVideoPath, "video/webm"); // Playwright 默认格式
 
   const refereePrompt = `
@@ -139,22 +190,22 @@ ${mdContent}
     
     report.passed = isPassed; // 将阈值判断结果注入最终报告
 
-    const reportPath = path.join(targetDir, "validation_report.json");
+    const reportPath = path.join(VALIDATION_DIR, `${componentName}_validation_report.json`);
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2), "utf-8");
 
     if (isPassed) {
-      console.log(`✅ [通过] 分数: ${score}/${PASSING_SCORE_THRESHOLD} | ${folderName}`);
+      console.log(`✅ [通过] 分数: ${score}/${PASSING_SCORE_THRESHOLD} | ${componentName}`);
       console.log(`   📝 评价摘要: 速度评估[${report.dimensions_analysis.timing_and_speed}]`);
       // 这里可以衔接将通过的组件标记为 Verified 或进行 R2 二次整理
     } else {
-      console.log(`❌ [拦截] 分数: ${score}/${PASSING_SCORE_THRESHOLD} | ${folderName} 未达标!`);
+      console.log(`❌ [拦截] 分数: ${score}/${PASSING_SCORE_THRESHOLD} | ${componentName} 未达标!`);
       console.log(`   🚨 核心缺陷:`);
       report.discrepancies.forEach((d, i) => console.log(`      ${i + 1}. ${d}`));
       console.log(`   💾 完整案发现场已保存至: ${reportPath} (为 Step 3 自愈系统铺路)`);
     }
 
   } catch (error) {
-    console.error(`💥 [AI 裁判] 评估 ${folderName} 时发生异常:`, error.message || error);
+    console.error(`💥 [AI 裁判] 评估 ${componentName} 时发生异常:`, error.message || error);
   }
 }
 
@@ -164,12 +215,15 @@ async function main() {
     return;
   }
 
-  const folders = fs.readdirSync(VALIDATION_DIR).filter(f => fs.statSync(path.join(VALIDATION_DIR, f)).isDirectory());
-  
-  console.log(`🔍 AI 裁判已就位，扫描到 ${folders.length} 个待评估产物...`);
+  const generatedFiles = fs
+    .readdirSync(VALIDATION_DIR)
+    .filter((f) => f.endsWith("_generated.webm"));
+  const components = generatedFiles.map((f) => f.replace(/_generated\.webm$/, ""));
 
-  for (const folder of folders) {
-    await validateComponent(folder);
+  console.log(`🔍 AI 裁判已就位，扫描到 ${components.length} 个待评估产物...`);
+
+  for (const name of components) {
+    await validateComponent(name);
     // 防止请求速率超限 (Rate Limit)
     await new Promise((resolve) => setTimeout(resolve, 3000));
   }
